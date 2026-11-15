@@ -88,6 +88,31 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 .mining-detail b{color:#f1dfb9;font-size:14px}
 .mining-detail small{font-size:11px;color:#c7b17e;font-weight:600}
 
+
+/* PREMIUM GOLD WALLET */
+.wallet-hero{padding:22px 21px;background:radial-gradient(ellipse at 100% 0%,#4b3b1d55,transparent 48%),linear-gradient(135deg,#29251b,#17191e 70%);border-color:#8d713c}
+.wallet-topline{display:flex;align-items:center;justify-content:space-between;color:#d6bd84;font-size:10px;font-weight:800;letter-spacing:1.8px}
+.wallet-chip{padding:6px 9px;border-radius:20px;border:1px solid #8c7040;background:#d1a94c16;color:#efd99f;font-size:9px;letter-spacing:1.2px}
+.wallet-label{margin:27px 0 5px;font-size:11px;letter-spacing:1.5px}
+.wallet-balance-line{display:flex;align-items:baseline;gap:10px}
+.wallet-balance-line .amount{font-size:clamp(39px,11vw,50px)}
+.wallet-balance-line>span{font-size:13px;font-weight:800;letter-spacing:1.4px;color:#d8c18e}
+.wallet-divider{height:1px;background:#ffffff17;margin:22px 0 14px}
+.wallet-foot{display:flex;justify-content:space-between;gap:10px;color:#aaa69c;font-size:10px}
+.wallet-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wallet-stat-card{margin:0;padding:17px 14px;min-width:0}
+.wallet-stat-card .muted{font-size:9px;letter-spacing:1px;font-weight:700}
+.wallet-stat-card b{display:block;margin-top:12px;color:#f0dfb8;font-size:19px;overflow-wrap:anywhere}
+.wallet-stat-card small{font-size:10px;color:#bca36e}
+.wallet-security{display:flex;align-items:flex-start;gap:13px;padding:17px}
+.wallet-security-icon{width:29px;height:29px;flex:0 0 29px;border-radius:50%;display:grid;place-items:center;background:#c9a45a20;border:1px solid #927442;color:#ebd49b;font-weight:900}
+.wallet-security-copy b,.wallet-withdraw b{font-size:13px;color:#eee1c5}
+.wallet-security-copy p,.wallet-withdraw p{font-size:11px;line-height:1.55;margin:5px 0 0}
+.wallet-withdraw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px}
+.wallet-withdraw button{flex:0 0 auto;padding:10px 12px;font-size:11px;background:#39342a;border-color:#6c5b3c;color:#d6c18f;box-shadow:none}
+.wallet-disclaimer{text-align:center;color:#777a82;font-size:10px;line-height:1.6;padding:0 15px 10px}
+@media(max-width:360px){.wallet-withdraw{align-items:flex-start;flex-direction:column}.wallet-withdraw button{width:100%}}
+
 </style>
 </head>
 <body>
@@ -162,13 +187,27 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 </section>
 
 <section id="wallet" class="page">
- <h2>💰 Wallet</h2>
- <div class="card">
-  <p class="muted">Available demo balance</p>
-  <div class="amount" id="walletBalance">0.00</div>
-  <p class="muted">Demo points only. No real cryptocurrency.</p>
-  <button onclick="alert('Real withdrawals are not enabled.')">Withdraw (Coming Soon)</button>
+ <h2>My Wallet</h2>
+ <div class="card wallet-hero">
+  <div class="wallet-topline"><span>LTE MINING WALLET</span><span class="wallet-chip">DEMO</span></div>
+  <p class="muted wallet-label">AVAILABLE BALANCE</p>
+  <div class="wallet-balance-line"><div class="amount" id="walletBalance">0.00</div><span>LTE</span></div>
+  <div class="wallet-divider"></div>
+  <div class="wallet-foot"><span>◈ &nbsp; Digital points</span><span>Not withdrawable</span></div>
  </div>
+ <div class="wallet-summary">
+  <div class="card wallet-stat-card"><span class="muted">TOTAL EARNED</span><b id="walletEarned">0.00 <small>LTE</small></b></div>
+  <div class="card wallet-stat-card"><span class="muted">ASSET</span><b>LTE <small>Points</small></b></div>
+ </div>
+ <div class="card wallet-security">
+  <div class="wallet-security-icon">✓</div>
+  <div class="wallet-security-copy"><b>Wallet status</b><p class="muted">Demo mode is active. Your displayed balance is stored locally on this device.</p></div>
+ </div>
+ <div class="card wallet-withdraw">
+  <div><b>Withdraw funds</b><p class="muted">Real cryptocurrency withdrawals are not available yet.</p></div>
+  <button onclick="alert('Real withdrawals are not enabled.')">Coming Soon</button>
+ </div>
+ <p class="wallet-disclaimer">LTE points are demo points, not real cryptocurrency or a monetary balance.</p>
 </section>
 
 <section id="profile" class="page">
@@ -230,6 +269,7 @@ function render(){
  document.getElementById('balance').textContent=balance.toFixed(2);
  document.getElementById('earned').textContent=earned.toFixed(2)+' LTE';
  document.getElementById('walletBalance').textContent=balance.toFixed(2);
+ document.getElementById('walletEarned').textContent=earned.toFixed(2)+' LTE';
  const active=end>Date.now();
  document.getElementById('status').textContent=active?'Mining':'Inactive';
  document.getElementById('mineBtn').disabled=active;

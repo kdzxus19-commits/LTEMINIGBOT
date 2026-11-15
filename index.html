@@ -575,6 +575,8 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
   <div class="profile-row"><span>Account</span><b id="profileAccount">Guest user</b></div>
   <div class="profile-row"><span>Platform</span><b id="profilePlatform">Web preview</b></div>
   <div class="profile-row"><span>Mining status</span><b id="profileMiningStatus">Inactive</b></div>
+<div class="profile-row"><span>Total LTE Balance</span><b id="profileBalance">0.0000 LTE</b></div>
+<div class="profile-row"><span>Total Earned</span><b id="profileTotalEarned">0.0000 LTE</b></div>
  </div>
  <div class="card profile-menu">
   <div class="profile-menu-item"><span class="profile-menu-icon">◇</span><div><b>Account security</b><p class="muted">Server verification will be added with backend integration.</p></div><span class="profile-soon">PENDING</span></div>
@@ -761,6 +763,10 @@ function render(){
  document.getElementById('earned').textContent=liveEarned.toFixed(4)+' LTE';
  document.getElementById('walletBalance').textContent=liveBalance.toFixed(4);
  document.getElementById('walletEarned').textContent=liveEarned.toFixed(4)+' LTE';
+  const profileBalanceEl=document.getElementById('profileBalance');
+  const profileEarnedEl=document.getElementById('profileTotalEarned');
+  if(profileBalanceEl)profileBalanceEl.textContent=liveBalance.toFixed(4)+' LTE';
+  if(profileEarnedEl)profileEarnedEl.textContent=liveEarned.toFixed(4)+' LTE';
  updateConversionDisplays(liveBalance);
  const claimed=get('lteClaimDay','')===new Date().toDateString();
  const dailyBtn=document.getElementById('dailyBtn');

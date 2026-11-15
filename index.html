@@ -29,125 +29,71 @@ nav button.active{color:#d99aff}
 .stat{display:flex;justify-content:space-between;margin:13px 0}
 input{background:#211632;border:1px solid #634083;color:white;padding:12px;border-radius:10px;width:100%}
 
-/* LTE MINING — visual refinement */
-body {
-  background: radial-gradient(ellipse at 50% 0%, #211033 0%, #090711 55%);
-}
-header {
-  background: linear-gradient(120deg, rgba(28,16,43,.96), rgba(12,9,20,.96));
-  border-bottom: 1px solid rgba(173,105,235,.24);
-}
-.logo {
-  letter-spacing: 1.2px;
-  text-shadow: 0 0 18px rgba(189,131,255,.42);
-}
-.pill {
-  border: 1px solid rgba(189,131,255,.25);
-  box-shadow: 0 0 16px rgba(150,59,232,.12);
-}
-.card {
-  background: linear-gradient(145deg, rgba(43,24,66,.96), rgba(17,12,29,.98));
-  border: 1px solid rgba(154,91,207,.48);
-  box-shadow: 0 10px 28px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.035);
-  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
-}
-.balance {
-  padding: 34px 14px;
-  border-color: rgba(190,128,255,.62);
-  box-shadow: 0 12px 34px rgba(130,55,205,.16), inset 0 1px 0 rgba(255,255,255,.06);
-}
-.coin {
-  filter: drop-shadow(0 0 14px rgba(185,117,255,.42));
-}
-.amount {
-  text-shadow: 0 0 20px rgba(190,128,255,.32);
-  letter-spacing: .5px;
-}
-button {
-  font-weight: 700;
-  box-shadow: 0 5px 16px rgba(111,43,177,.18);
-  transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
-}
-button:active {
-  transform: scale(.97);
-  filter: brightness(1.12);
-}
-button.primary {
-  background: linear-gradient(110deg, #ad4cff, #7636d9);
-  box-shadow: 0 7px 22px rgba(145,55,232,.32);
-}
-nav {
-  background: rgba(18,13,29,.97);
-  border-top: 1px solid rgba(154,91,207,.42);
-  box-shadow: 0 -8px 24px rgba(0,0,0,.22);
-  padding-bottom: max(12px, env(safe-area-inset-bottom));
-}
-nav button {
-  border-radius: 12px;
-  box-shadow: none;
-}
-nav button.active {
-  color: #e0baff;
-  text-shadow: 0 0 12px rgba(189,131,255,.65);
-}
-.page h2 {
-  letter-spacing: .2px;
-}
-input {
-  outline: none;
-}
-input:focus {
-  border-color: #bd83ff;
-  box-shadow: 0 0 0 3px rgba(189,131,255,.12);
-}
-
-
-/* LTE MINING — visible redesign v2 */
-:root{color-scheme:dark}
-body{background:radial-gradient(ellipse at 50% -10%,#542080 0%,#21102f 28%,#090711 68%) !important;min-height:100vh}
-header{padding:24px 20px !important;background:linear-gradient(100deg,#29113f,#100b1c) !important;border-bottom:1px solid #9b55d2 !important;box-shadow:0 8px 30px #0008}
-.logo{font-size:25px !important;font-weight:900 !important;color:#e3c2ff !important;text-shadow:0 0 18px #b45cff !important}
-.pill{background:#54227b !important;color:#f2dcff !important;border:1px solid #c17aff !important;padding:9px 15px !important}
-main{padding:18px 16px 110px !important}
-.card{background:linear-gradient(145deg,#32164c,#171023 78%) !important;border:1px solid #854bb0 !important;border-radius:24px !important;padding:23px !important;box-shadow:0 12px 30px #0007,0 0 18px #8b38c522 !important}
-.card.balance{padding:36px 16px !important;border:1px solid #c17aff !important;background:radial-gradient(ellipse at 50% 0%,#57257d,#21102f 72%) !important;box-shadow:0 0 32px #a33cff38,inset 0 1px #ffffff20 !important}
-.coin{font-size:72px !important;filter:drop-shadow(0 0 18px #c27aff) !important}
-.amount{font-size:46px !important;color:#f0d8ff !important;text-shadow:0 0 22px #b45cff !important}
-.muted{color:#c5b3d6 !important}
-.stat{padding:10px 0 !important;border-bottom:1px solid #ffffff12}
-button{background:linear-gradient(110deg,#bd63ff,#7830c9) !important;border:1px solid #d6a0ff !important;border-radius:15px !important;box-shadow:0 7px 20px #9b39df55 !important}
-button.primary{padding:17px !important;font-size:16px !important;letter-spacing:.5px}
-button:disabled{filter:grayscale(.45) !important;opacity:.6 !important}
-nav{background:#100b1c !important;border-top:1px solid #854bb0 !important;box-shadow:0 -8px 28px #0009 !important;padding:12px 3px max(14px,env(safe-area-inset-bottom)) !important}
-nav button{background:transparent !important;border:0 !important;box-shadow:none !important;color:#bda8ce !important}
-nav button.active{color:#f0d8ff !important;text-shadow:0 0 14px #c47aff !important}
-.page h2{color:#e5c9ff !important}
-input{background:#180e25 !important;border:1px solid #9a5bc4 !important}
+/* LTE MINING — PREMIUM GOLD FINTECH */
+:root{color-scheme:dark;--gold:#e7bd68;--gold2:#f6dfa2;--ink:#090a0d;--panel:#15171c;--muted:#9a9da6}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:linear-gradient(180deg,#111318 0%,#090a0d 65%);color:#f5f5f6;font-family:Inter,Arial,sans-serif}
+header{padding:20px 20px 18px;display:flex;align-items:center;justify-content:space-between;background:#101216;border-bottom:1px solid #292a2d;position:relative}
+.logo{font-size:21px;font-weight:850;letter-spacing:1.3px;color:var(--gold2)}
+.pill{padding:8px 13px;border-radius:30px;background:#242019;border:1px solid #6f592e;color:var(--gold2);font-size:12px;font-weight:700;letter-spacing:1px}
+main{max-width:520px;margin:0 auto;padding:20px 17px 112px}
+.page{display:none}.page.active{display:block}
+.page h2{font-size:21px;color:#f2e5c7;margin:8px 2px 16px}
+.card{background:linear-gradient(145deg,#1b1e24,#121419);border:1px solid #30333a;border-radius:20px;padding:20px;margin:13px 0;box-shadow:0 12px 28px #0005}
+.balance{position:relative;overflow:hidden;text-align:left;padding:23px 22px 22px;background:linear-gradient(130deg,#29251b,#17191e 65%);border:1px solid #8d713c;box-shadow:0 12px 32px #0007,inset 0 1px #fff1}
+.balance:after{content:"";position:absolute;width:190px;height:190px;right:-75px;top:-90px;border-radius:50%;background:#d5a84b12;pointer-events:none}
+.balance .muted:first-child{font-size:12px;letter-spacing:1.7px;color:#c6b58e;font-weight:700}
+.coin{font-size:39px;margin:17px 0 7px;filter:drop-shadow(0 4px 12px #d5a84b55)}
+.amount{font-size:42px;font-weight:800;letter-spacing:-1px;color:var(--gold2);text-shadow:0 2px 16px #d5a84b22}
+.balance .muted:last-child{margin-top:5px;color:#b9b3a5;font-size:12px;letter-spacing:1.5px}
+.stat{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;margin:0;border-bottom:1px solid #ffffff10;color:#b8bbc2;font-size:14px}
+.stat:last-of-type{border-bottom:0}
+.stat b{color:#f2e6cc;font-size:14px;text-align:right}
+.muted{color:var(--muted);font-size:13px}
+button{border:1px solid #b18b48;border-radius:13px;padding:13px 16px;background:linear-gradient(120deg,#e4bd70,#b88b3e);color:#17130b;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 6px 18px #bd934522;transition:transform .18s,filter .18s}
+button:active{transform:scale(.98);filter:brightness(1.08)}
+button:disabled{opacity:.48;filter:grayscale(.6)}
+.primary{width:100%;margin-top:15px;padding:16px;font-size:14px;letter-spacing:.6px}
+#status{color:var(--gold2)}
+#earned{font-size:26px;color:var(--gold2);margin:10px 0 0}
+#timer{font-size:30px;letter-spacing:2px;color:var(--gold2);font-variant-numeric:tabular-nums}
+input{width:100%;padding:13px;border-radius:12px;background:#0e1014;border:1px solid #3c3e43;color:#fff;outline:none}
+input:focus{border-color:var(--gold)}
+nav{position:fixed;z-index:5;bottom:0;left:0;right:0;display:flex;justify-content:space-around;gap:0;background:#101216;border-top:1px solid #35302a;padding:10px 2px max(12px,env(safe-area-inset-bottom));box-shadow:0 -8px 26px #0009}
+nav button{flex:1;min-width:0;background:transparent;border:0;border-radius:10px;color:#8d9098;padding:8px 1px;font-size:11px;line-height:1.55;box-shadow:none}
+nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0 1px #9b783c44}
+#mining .card{text-align:center;padding:28px 20px}
+#mining .coin{font-size:48px}
+#mining .primary{max-width:320px}
+#tasks .card,#referral .card,#wallet .card,#profile .card{border-color:#35383e}
+#wallet .amount{margin:12px 0}
+@media(min-width:420px){main{padding-left:20px;padding-right:20px}.balance{padding:27px}}
 
 </style>
 </head>
 <body>
 <header>
- <div class="logo">⚡ LTE MINING</div>
- <div class="pill">🟣 LIVE</div>
+ <div class="logo">LTE&nbsp; / &nbsp;MINING</div>
+ <div class="pill">● LIVE</div>
 </header>
 
 <main>
 <section id="home" class="page active">
+ <h2>Overview</h2>
  <div class="card balance">
-  <div class="muted">YOUR LTE BALANCE</div>
-  <div class="coin">💎</div>
+  <div class="muted">TOTAL LTE BALANCE</div>
+  <div class="coin">◈</div>
   <div class="amount" id="balance">0.00</div>
   <div class="muted">LTE POINTS</div>
  </div>
  <div class="card">
   <div class="stat"><span>Mining status</span><b id="status">Inactive</b></div>
-  <div class="stat"><span>Mining speed</span><b>10 LTE / hour</b></div>
-  <div class="stat"><span>Session duration</span><b>24 hours</b></div>
-  <button class="primary" id="mineBtn" onclick="startMining()">⚡ START MINING</button>
+  <div class="stat"><span>Mining rate</span><b>10 LTE / hour</b></div>
+  <div class="stat"><span>Session length</span><b>24 hours</b></div>
+  <button class="primary" id="mineBtn" onclick="startMining()">START MINING&nbsp; →</button>
  </div>
  <div class="card">
-  <div class="muted">TOTAL EARNED</div>
+  <div class="muted">LIFETIME EARNINGS</div>
   <h2 id="earned">0.00 LTE</h2>
  </div>
 </section>
@@ -155,7 +101,7 @@ input{background:#180e25 !important;border:1px solid #9a5bc4 !important}
 <section id="mining" class="page">
  <h2>⚡ Mining Center</h2>
  <div class="card">
-  <div class="coin">💎</div>
+  <div class="coin">◈</div>
   <h2 id="timer">00:00:00</h2>
   <p class="muted">Your mining session countdown</p>
   <button class="primary" onclick="startMining()">START / CLAIM MINING</button>

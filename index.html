@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LTE Mining</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090711;color:white;font-family:Arial,sans-serif}
+header{padding:22px 18px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:23px;font-weight:900;color:#bd83ff}
+.pill{background:#211632;padding:8px 13px;border-radius:20px;color:#d9b8ff}
+main{padding:12px 18px 100px;max-width:500px;margin:auto}
+.card{background:linear-gradient(145deg,#26143e,#120e20);border:1px solid #553276;border-radius:22px;padding:22px;margin:12px 0}
+.muted{color:#aaa0b9;font-size:13px}
+.balance{text-align:center;padding:28px 10px}
+.coin{font-size:65px;margin:15px}
+.amount{font-size:38px;font-weight:bold;color:#d9aaff}
+button{border:0;border-radius:14px;padding:14px;background:#963be8;color:white;font-weight:bold;font-size:15px;cursor:pointer}
+button:disabled{opacity:.5}
+.primary{width:100%;margin-top:15px}
+nav{position:fixed;bottom:0;left:0;right:0;background:#151020;border-top:1px solid #38264b;display:flex;justify-content:space-around;padding:12px 3px}
+nav button{background:transparent;color:#b9a8c9;padding:9px 7px;font-size:12px}
+nav button.active{color:#d99aff}
+.page{display:none}
+.page.active{display:block}
+.stat{display:flex;justify-content:space-between;margin:13px 0}
+input{background:#211632;border:1px solid #634083;color:white;padding:12px;border-radius:10px;width:100%}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">⚡ LTE MINING</div>
+ <div class="pill">🟣 LIVE</div>
+</header>
+
+<main>
+<section id="home" class="page active">
+ <div class="card balance">
+  <div class="muted">YOUR LTE BALANCE</div>
+  <div class="coin">💎</div>
+  <div class="amount" id="balance">0.00</div>
+  <div class="muted">LTE POINTS</div>
+ </div>
+ <div class="card">
+  <div class="stat"><span>Mining status</span><b id="status">Inactive</b></div>
+  <div class="stat"><span>Mining speed</span><b>10 LTE / hour</b></div>
+  <div class="stat"><span>Session duration</span><b>24 hours</b></div>
+  <button class="primary" id="mineBtn" onclick="startMining()">⚡ START MINING</button>
+ </div>
+ <div class="card">
+  <div class="muted">TOTAL EARNED</div>
+  <h2 id="earned">0.00 LTE</h2>
+ </div>
+</section>
+
+<section id="mining" class="page">
+ <h2>⚡ Mining Center</h2>
+ <div class="card">
+  <div class="coin">💎</div>
+  <h2 id="timer">00:00:00</h2>
+  <p class="muted">Your mining session countdown</p>
+  <button class="primary" onclick="startMining()">START / CLAIM MINING</button>
+ </div>
+</section>
+
+<section id="tasks" class="page">
+ <h2>🎯 Tasks</h2>
+ <div class="card">
+  <h3>Daily Check-in</h3>
+  <p class="muted">Daily reward: 50 LTE points</p>
+  <button onclick="daily()">Claim Reward</button>
+ </div>
+ <div class="card">
+  <h3>Coming soon</h3>
+  <p class="muted">More community tasks will be added later.</p>
+ </div>
+</section>
+
+<section id="referral" class="page">
+ <h2>👥 Invite Friends</h2>
+ <div class="card">
+  <h3>Invite and earn</h3>
+  <p class="muted">Referral system will be connected to Telegram later.</p>
+  <button onclick="alert('Referral link will be enabled after Telegram integration.')">My Referral Link</button>
+ </div>
+</section>
+
+<section id="wallet" class="page">
+ <h2>💰 Wallet</h2>
+ <div class="card">
+  <p class="muted">Available demo balance</p>
+  <div class="amount" id="walletBalance">0.00</div>
+  <p class="muted">Demo points only. No real cryptocurrency.</p>
+  <button onclick="alert('Real withdrawals are not enabled.')">Withdraw (Coming Soon)</button>
+ </div>
+</section>
+
+<section id="profile" class="page">
+ <h2>👤 Profile</h2>
+ <div class="card">
+  <p>Project: LTE Mining</p>
+  <p class="muted">Demo account</p>
+  <p class="muted">Telegram integration: Pending</p>
+ </div>
+</section>
+</main>
+
+<nav>
+ <button class="active" onclick="showPage('home',this)">🏠<br>Home</button>
+ <button onclick="showPage('mining',this)">⚡<br>Mining</button>
+ <button onclick="showPage('tasks',this)">🎯<br>Tasks</button>
+ <button onclick="showPage('referral',this)">👥<br>Invite</button>
+ <button onclick="showPage('wallet',this)">💰<br>Wallet</button>
+ <button onclick="showPage('profile',this)">👤<br>You</button>
+</nav>
+
+<script>
+const get=(k,d)=>JSON.parse(localStorage.getItem(k)||JSON.stringify(d));
+let balance=get('lteBalance',0);
+let earned=get('lteEarned',0);
+let end=get('lteEnd',0);
+let last=get('lteLast',0);
+let claimed=get('lteDaily',false);
+
+function save(){
+ localStorage.setItem('lteBalance',JSON.stringify(balance));
+ localStorage.setItem('lteEarned',JSON.stringify(earned));
+ localStorage.setItem('lteEnd',JSON.stringify(end));
+ localStorage.setItem('lteLast',JSON.stringify(last));
+ localStorage.setItem('lteDaily',JSON.stringify(claimed));
+ render();
+}
+function startMining(){
+ if(end>Date.now()){alert('Mining is already active!');return;}
+ if(end>0){
+  const reward=(end-last)/3600000*10;
+  balance+=Math.max(0,reward);
+  earned+=Math.max(0,reward);
+ }
+ last=Date.now();
+ end=last+86400000;
+ save();
+}
+function daily(){
+ const today=new Date().toDateString();
+ if(get('lteClaimDay','')===today){alert('Already claimed today!');return;}
+ balance+=50;
+ earned+=50;
+ localStorage.setItem('lteClaimDay',JSON.stringify(today));
+ save();
+ alert('50 LTE points added!');
+}
+function render(){
+ document.getElementById('balance').textContent=balance.toFixed(2);
+ document.getElementById('earned').textContent=earned.toFixed(2)+' LTE';
+ document.getElementById('walletBalance').textContent=balance.toFixed(2);
+ const active=end>Date.now();
+ document.getElementById('status').textContent=active?'Mining':'Inactive';
+ document.getElementById('mineBtn').disabled=active;
+ document.getElementById('mineBtn').textContent=active?'MINING ACTIVE':'⚡ START MINING';
+}
+function showPage(id,btn){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+}
+function tick(){
+ if(end>Date.now()){
+  const s=Math.floor((end-Date.now())/1000);
+  document.getElementById('timer').textContent=
+   String(Math.floor(s/3600)).padStart(2,'0')+':'+
+   String(Math.floor(s%3600/60)).padStart(2,'0')+':'+
+   String(s%60).padStart(2,'0');
+ }else{
+  document.getElementById('timer').textContent='00:00:00';
+ }
+}
+render();
+tick();
+setInterval(tick,1000);
+</script>
+</body>
+  </html>
+  

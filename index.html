@@ -218,7 +218,8 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
    <button class="activation-copy-btn" type="button" onclick="copyActivationAddress()">COPY WALLET ADDRESS</button>
   </div>
   <div class="activation-status"><b>Payment activation is being secured.</b><br>No payment is being requested yet. The app will unlock only after the server verifies the on-chain transaction.</div>
-  <p class="activation-foot">Never share your recovery phrase or private key. LTE Mining will never ask for them.</p>
+  <button class="primary" type="button" onclick="previewDemo()">PREVIEW DEMO APP</button>
+  <p class="activation-foot">Demo preview only — this does not activate an account or verify payment. Never share your recovery phrase or private key.</p>
  </div>
 </div>
 
@@ -364,6 +365,7 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 
 <script>
 
+function previewDemo(){const gate=document.getElementById('activationGate');if(gate)gate.style.display='none';alert('Demo preview only. Account activation is not enabled yet.');}
 function copyActivationAddress(){
  const address='UQDt-rCzwylBWPzIx8toN3jNuvTnSzVh_NPxhQUSjsN1zWgY';
  if(navigator.clipboard&&navigator.clipboard.writeText){

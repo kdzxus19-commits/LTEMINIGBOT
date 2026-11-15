@@ -176,9 +176,52 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 .profile-soon{font-size:8px;font-weight:800;letter-spacing:.8px;color:#c4ad7c;border:1px solid #655535;border-radius:20px;padding:5px 6px}
 .profile-disclaimer{text-align:center;color:#777a82;font-size:10px;line-height:1.6;padding:0 15px 10px}
 
+
+/* SHADOW MINER — PRE-ENTRY ACTIVATION GATE */
+#activationGate{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:24px 18px;background:radial-gradient(ellipse at 50% 12%,#3b2c16 0%,#17191e 38%,#08090c 100%);overflow:auto}
+.activation-shell{width:100%;max-width:430px;text-align:center;padding:28px 21px 25px;border:1px solid #80663a;border-radius:28px;background:linear-gradient(150deg,#222018f5,#14161bf7 65%);box-shadow:0 22px 65px #000b,inset 0 1px #fff1}
+.activation-logo{width:112px;height:112px;object-fit:cover;border-radius:29px;border:1px solid #b18b48;box-shadow:0 0 34px #d5a84b30;margin:0 auto 17px}
+.activation-kicker{font-size:10px;font-weight:800;letter-spacing:3px;color:#c6a65e}
+.activation-title{font-size:27px;line-height:1.2;color:#f4e2b6;margin:12px 0 9px}
+.activation-copy{font-size:13px;line-height:1.7;color:#a9a9a6;max-width:310px;margin:0 auto 20px}
+.activation-fee{padding:17px;border:1px solid #796039;border-radius:17px;background:linear-gradient(120deg,#302719,#1a1b1e);margin:18px 0}
+.activation-fee small{display:block;font-size:9px;letter-spacing:2px;color:#bba574;font-weight:800}
+.activation-fee strong{display:block;font-size:39px;letter-spacing:-1px;color:#f2d58f;margin-top:6px}
+.activation-once{font-size:10px;color:#a9a39a;margin-top:4px}
+.activation-wallet{padding:14px;border:1px solid #3d3e40;border-radius:15px;background:#101216;text-align:left}
+.activation-wallet-label{font-size:9px;letter-spacing:1.5px;color:#bca36e;font-weight:800;margin-bottom:8px}
+.activation-wallet-address{font-size:11px;line-height:1.6;color:#ded6c3;overflow-wrap:anywhere;user-select:text}
+.activation-copy-btn{width:100%;margin-top:12px;background:#29251c;border:1px solid #7b6237;color:#e7d3a0;box-shadow:none}
+.activation-status{margin:17px 0 0;padding:11px 12px;border-radius:12px;background:#c49b4912;border:1px solid #695532;color:#d8c18c;font-size:11px;line-height:1.6}
+.activation-status b{color:#f0d99f}
+.activation-foot{font-size:9px;color:#777a82;line-height:1.6;margin:17px 8px 0}
+@media(max-height:700px){#activationGate{align-items:flex-start}.activation-shell{margin:auto 0;padding:20px}.activation-logo{width:82px;height:82px}.activation-title{font-size:23px}}
+
 </style>
 </head>
 <body>
+
+<div id="activationGate">
+ <div class="activation-shell">
+  <img class="activation-logo" src="assets/lte-mining-logo.svg" alt="LTE Mining Shadow Miner">
+  <div class="activation-kicker">WELCOME TO LTE MINING</div>
+  <h1 class="activation-title">Activate Your Account</h1>
+  <p class="activation-copy">A one-time activation will unlock your LTE Mining experience. Connect securely and review the payment details before confirming.</p>
+  <div class="activation-fee">
+   <small>ONE-TIME ACTIVATION FEE</small>
+   <strong>0.05 GRAM</strong>
+   <div class="activation-once">Paid once per account • TON Network</div>
+  </div>
+  <div class="activation-wallet">
+   <div class="activation-wallet-label">OFFICIAL RECEIVING WALLET</div>
+   <div class="activation-wallet-address" id="activationAddress">UQDt-rCzwylBWPzIx8toN3jNuvTnSzVh_NPxhQUSjsN1zWgY</div>
+   <button class="activation-copy-btn" type="button" onclick="copyActivationAddress()">COPY WALLET ADDRESS</button>
+  </div>
+  <div class="activation-status"><b>Payment activation is being secured.</b><br>No payment is being requested yet. The app will unlock only after the server verifies the on-chain transaction.</div>
+  <p class="activation-foot">Never share your recovery phrase or private key. LTE Mining will never ask for them.</p>
+ </div>
+</div>
+
 <header>
  <div class="logo"><img class="brand-mark" src="assets/lte-mining-logo.svg" alt="LTE Mining Shadow Miner logo"><span class="brand-wordmark">LTE MINING<small>MINE • EARN • GROW</small></span></div>
  <div class="pill">● LIVE</div>
@@ -320,6 +363,14 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 </nav>
 
 <script>
+
+function copyActivationAddress(){
+ const address='UQDt-rCzwylBWPzIx8toN3jNuvTnSzVh_NPxhQUSjsN1zWgY';
+ if(navigator.clipboard&&navigator.clipboard.writeText){
+  navigator.clipboard.writeText(address).then(()=>alert('Wallet address copied.')).catch(()=>alert(address));
+ }else{alert(address);}
+}
+
 const get=(k,d)=>JSON.parse(localStorage.getItem(k)||JSON.stringify(d));
 let balance=get('lteBalance',0);
 let earned=get('lteEarned',0);

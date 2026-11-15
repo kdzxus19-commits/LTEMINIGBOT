@@ -106,68 +106,82 @@ Deno.serve(async (req) => {
         telegram_id: telegramId,
         username: user.username ?? null,
       }, { onConflict: "telegram_id", ignoreDuplicates: false });
-
       if (error) {
         console.error("Profile upsert failed:", error.message);
         return json({ success: false, error: "Could not save Telegram profile" }, 500);
       }
 
+      const referralCode = String(body?.referralCode ?? "").trim().toUpperCase();
+      if (referralCode) {
+        const { data: inviter } = await supabase.from("profiles")
+          .select("telegram_id").eq("referral_code", referralCode).maybeSingle();
+        if (inviter && Number(inviter.telegram_id) !== telegramId) {
+          const { error: bindError } = await supabase.from("profiles").update({ referred_by: Number(inviter.telegram_id) })
+            .eq("telegram_id", telegramId).is("referred_by", null);
+          if (bindError) console.error("Referral binding failed:", bindError.message);
+        }
+      }
+
+      const { data: profile } = await supabase.from("profiles")
+        .select("referral_code, wallet_address").eq("telegram_id", telegramId).single();
       return json({
         success: true,
         message: "Telegram account verified and profile synchronized",
         telegram_id: telegramId,
         username: user.username ?? null,
+        referral_code: profile?.referral_code ?? null,
+        wallet_address: profile?.wallet_address ?? null,
       });
     }
 
-    if (body?.action === "create-wallet-challenge") {
+    if (body?.action === "link-wallet") {
+      const address = String(body?.address ?? "").trim();
+      const validTonAddress =
+        /^(?:-1|0):[0-9a-fA-F]{64}$/.test(address) ||
+        /^(?:EQ|UQ|kQ|0Q)[A-Za-z0-9_-]{46,50}$/.test(address);
+      if (!validTonAddress) return json({ success: false, error: "Invalid TON wallet address" }, 400);
+
       const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("telegram_id")
-        .eq("telegram_id", telegramId)
-        .maybeSingle();
-
-      if (profileError || !profile) {
-        return json({ success: false, error: "Telegram profile not found. Sync profile first." }, 404);
+        .from("profiles").select("telegram_id, wallet_address")
+        .eq("telegram_id", telegramId).maybeSingle();
+      if (profileError || !profile) return json({ success: false, error: "Telegram profile not found. Reopen the app." }, 404);
+      if (profile.wallet_address && profile.wallet_address !== address) {
+        return json({ success: false, error: "A wallet is already linked to this account. Contact support to change it." }, 409);
       }
 
-      // TON Connect ton_proof payload: fresh 32-byte random nonce, valid for 10 minutes.
-      const randomBytes = crypto.getRandomValues(new Uint8Array(32));
-      const payload = [...randomBytes].map((b) => b.toString(16).padStart(2, "0")).join("");
-      const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
-
-      // Invalidate older unused challenges for this Telegram account.
-      const { error: cleanupError } = await supabase
-        .from("wallet_link_challenges")
-        .delete()
-        .eq("telegram_id", telegramId)
-        .is("consumed_at", null);
-
-      if (cleanupError) {
-        console.error("Challenge cleanup failed:", cleanupError.message);
-        return json({ success: false, error: "Could not prepare wallet challenge" }, 500);
+      const { error: saveError } = await supabase.from("profiles")
+        .update({ wallet_address: address, wallet_linked_at: new Date().toISOString() })
+        .eq("telegram_id", telegramId);
+      if (saveError) {
+        if (saveError.code === "23505") return json({ success: false, error: "This wallet is already linked to another account." }, 409);
+        console.error("Wallet save failed:", saveError.message);
+        return json({ success: false, error: "Could not save wallet address" }, 500);
       }
 
-      const { error: insertError } = await supabase
-        .from("wallet_link_challenges")
-        .insert({
-          telegram_id: telegramId,
-          payload,
-          expires_at: expiresAt,
-        });
-
-      if (insertError) {
-        console.error("Challenge insert failed:", insertError.message);
-        return json({ success: false, error: "Could not create wallet challenge" }, 500);
+      const { data: rewardRows, error: rewardError } = await supabase.rpc("qualify_lte_referral", {
+        p_invitee_telegram_id: telegramId
+      });
+      if (rewardError) {
+        console.error("Referral qualification failed:", rewardError.message);
+        return json({ success: false, error: "Wallet linked, but referral reward could not be processed. Please retry." }, 500);
       }
-
       return json({
         success: true,
-        action: "create-wallet-challenge",
-        payload,
-        expires_at: expiresAt,
-        message: "One-time TON Proof challenge created",
+        wallet_address: address,
+        referral_rewarded: Array.isArray(rewardRows) ? Boolean(rewardRows[0]?.rewarded) : Boolean(rewardRows?.rewarded),
+        message: "Wallet address linked",
       });
+    }
+
+    if (body?.action === "get-referrals") {
+      const { data: profile, error: profileError } = await supabase.from("profiles")
+        .select("referral_code, wallet_address").eq("telegram_id", telegramId).maybeSingle();
+      if (profileError || !profile) return json({ success: false, error: "Profile not found" }, 404);
+      const { count, error: countError } = await supabase.from("lte_referrals")
+        .select("id", { count: "exact", head: true })
+        .eq("inviter_telegram_id", telegramId).eq("status", "qualified");
+      if (countError) return json({ success: false, error: "Could not load referrals" }, 500);
+      return json({ success: true, referral_code: profile.referral_code, qualified_count: count ?? 0, wallet_address: profile.wallet_address });
     }
 
     return json({ success: false, error: "Unknown action" }, 400);

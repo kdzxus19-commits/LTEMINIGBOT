@@ -205,6 +205,46 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 .ton-connect-status{font-size:10px;color:#bca36e;margin:9px 0 0;overflow-wrap:anywhere;line-height:1.5}
 #ton-connect{min-height:44px}
 #ton-connect button{font-family:inherit!important}
+
+/* LTE MINING — POLISHED PRODUCT UI */
+:root{--gold:#e7bd68;--gold-soft:#f5dfa8;--line:rgba(226,194,126,.16);--surface:#15171c}
+body{background:radial-gradient(ellipse at 50% -18%,#302719 0%,#111318 38%,#090a0d 78%);letter-spacing:.05px}
+header{position:sticky;top:0;z-index:8;backdrop-filter:blur(18px);background:rgba(13,15,19,.92);border-bottom:1px solid var(--line);padding:13px 18px}
+.brand-mark{border-radius:13px;width:40px;height:40px}
+.pill{background:rgba(211,174,94,.09);border:1px solid rgba(211,174,94,.28);font-size:9px;letter-spacing:1.15px;color:#e8d19b;padding:8px 11px}
+main{padding-top:23px}
+.page.active{animation:pageEnter .28s ease both}
+@keyframes pageEnter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.page h2{letter-spacing:-.45px}
+.home-welcome{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 2px 20px}
+.home-welcome h2{font-size:23px;margin:7px 0 5px;color:#f4e8ce}
+.home-welcome p{font-size:11px;margin:0;line-height:1.5}
+.eyebrow,.home-section-label{font-size:9px;font-weight:850;letter-spacing:1.9px;color:#c9ad70}
+.preview-tag{flex:0 0 auto;border:1px solid #78613a;background:#c7a05212;color:#e4ca8e;border-radius:30px;padding:7px 9px;font-size:8px;font-weight:900;letter-spacing:1px}
+.balance{border-radius:24px;padding:25px 22px;background:radial-gradient(ellipse at 100% 0%,#b18b3c24,transparent 43%),linear-gradient(135deg,#29251b,#191a1e 68%);box-shadow:0 18px 42px #0008,inset 0 1px #ffffff12}
+.balance .coin{width:46px;height:46px;display:grid;place-items:center;border-radius:15px;background:#d5ad5b16;border:1px solid #a282493d;font-size:28px;margin:18px 0 12px}
+.balance .amount{font-size:clamp(40px,11vw,48px);letter-spacing:-1.8px}
+.home-section-label{margin:23px 4px 9px}
+.home-overview-card{padding:12px 18px 17px}
+.home-overview-card .primary{margin-top:16px}
+.home-metrics{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.home-metric{margin:11px 0;padding:16px 14px;min-width:0}
+.home-metric .muted{display:block;font-size:8px;letter-spacing:1.1px;font-weight:800}
+.home-metric strong{display:block;margin-top:13px;color:#f0d99f;font-size:20px;letter-spacing:-.5px;overflow-wrap:anywhere}
+.home-metric small{display:block;color:#85878e;font-size:9px;line-height:1.5;margin-top:6px}
+.card{box-shadow:0 13px 30px #0005,inset 0 1px #ffffff08;backdrop-filter:blur(10px);transition:border-color .2s,transform .2s}
+button{letter-spacing:.45px}
+button:focus-visible{outline:2px solid #f5dfa8;outline-offset:3px}
+nav{backdrop-filter:blur(18px);background:rgba(14,16,20,.96);border-top:1px solid var(--line);padding-top:9px}
+nav button{font-weight:750;transition:color .18s,background .18s}
+nav button.active{color:#f3dca5;background:linear-gradient(180deg,#d5a84b18,transparent);box-shadow:inset 0 2px #d5ad5b}
+.mining-ring{box-shadow:0 0 0 1px #d2ad6440,0 0 42px #c49b4938,inset 0 0 18px #0008}
+.mining-state{box-shadow:0 5px 18px #0004}
+.wallet-hero,.tasks-feature,.invite-hero,.profile-hero{box-shadow:0 16px 36px #0007,inset 0 1px #ffffff10}
+.activation-shell{backdrop-filter:blur(20px)}
+@media(max-width:380px){.home-welcome h2{font-size:20px}.home-metric{padding:14px 11px}.home-metric strong{font-size:17px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
 </style>
 </head>
 <body>
@@ -233,27 +273,28 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 
 <header>
  <div class="logo"><img class="brand-mark" src="assets/lte-mining-logo.svg" alt="LTE Mining Shadow Miner logo"><span class="brand-wordmark">LTE MINING<small>MINE • EARN • GROW</small></span></div>
- <div class="pill">● LIVE</div>
+ <div class="pill">● BETA PREVIEW</div>
 </header>
 
 <main>
 <section id="home" class="page active">
- <h2>Overview</h2>
+ <div class="home-welcome"><div><div class="eyebrow">YOUR MINING DASHBOARD</div><h2>Welcome to LTE Mining</h2><p class="muted">Track your points and session progress in one place.</p></div><span class="preview-tag">PREVIEW</span></div>
  <div class="card balance">
   <div class="muted">TOTAL LTE BALANCE</div>
   <div class="coin">◈</div>
   <div class="amount" id="balance">0.00</div>
   <div class="muted">LTE POINTS</div>
  </div>
- <div class="card">
+ <div class="home-section-label">MINING OVERVIEW</div>
+ <div class="card home-overview-card">
   <div class="stat"><span>Mining status</span><b id="status">Inactive</b></div>
   <div class="stat"><span>Mining rate</span><b>10 LTE / hour</b></div>
   <div class="stat"><span>Session length</span><b>24 hours</b></div>
   <button class="primary" id="mineBtn" onclick="startMining()">START MINING&nbsp; →</button>
  </div>
- <div class="card">
-  <div class="muted">LIFETIME EARNINGS</div>
-  <h2 id="earned">0.00 LTE</h2>
+ <div class="home-metrics">
+  <div class="card home-metric"><span class="muted">LIFETIME EARNINGS</span><strong id="earned">0.00 LTE</strong><small>Accumulated demo points</small></div>
+  <div class="card home-metric"><span class="muted">SESSION LENGTH</span><strong>24 HRS</strong><small>Per mining session</small></div>
  </div>
 </section>
 

@@ -450,6 +450,9 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
 .chart-legend{width:7px;height:7px;box-shadow:none}
 @media(max-width:370px){.analytics-card{padding:16px 12px}.analytics-stats{gap:5px}.analytics-stats>div{padding:9px 6px}.analytics-stats span{font-size:7px}.analytics-stats b{font-size:10px}.session-chart{gap:5px}}
 
+.mining-state{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.mining-status-text{padding:4px 8px;border:1px solid #766039;border-radius:20px;color:#e7bd68;font-size:10px;font-weight:800;letter-spacing:.5px}
+
 </style>
 </head>
 <body>
@@ -475,13 +478,7 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
   <div class="conversion-row"><span>Estimated USD value</span><b id="homeUsdValue">—</b></div>
   <p class="conversion-note" id="homeGramStatus">Indicative conversion only. LTE has no independent market price and is not withdrawable.</p>
  </div>
- <div class="home-section-label">MINING OVERVIEW</div>
- <div class="card home-overview-card">
-  <div class="stat"><span>Mining status</span><b id="status">Inactive</b></div>
-  <div class="stat"><span>Mining rate</span><b>10 LTE / hour</b></div>
-  <div class="stat"><span>Session length</span><b>8 hours</b></div>
-  <button class="primary" id="mineBtn" onclick="startMining()">START MINING&nbsp; →</button>
- </div>
+
  <div class="home-metrics">
   <div class="card home-metric"><span class="muted">LIFETIME EARNINGS</span><strong id="earned">0.00 LTE</strong><small>Accumulated demo points</small></div>
   <div class="card home-metric"><span class="muted">SESSION LENGTH</span><strong>8 HRS</strong><small>Per mining session</small></div>
@@ -520,9 +517,9 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
     <div class="mining-caption">TIME REMAINING</div>
    </div>
   </div>
-  <div class="mining-state"><span class="live-dot"></span> MINING SESSION</div>
+  <div class="mining-state"><span class="live-dot"></span> MINING SESSION <span class="mining-status-text" id="status">Inactive</span></div>
   <p class="muted mining-description">Your LTE points accrue continuously while the 8-hour session is active.</p>
-  <button class="primary" onclick="startMining()">START / CLAIM MINING</button>
+  <button class="primary" id="mineBtn" onclick="startMining()">START / CLAIM MINING</button>
  </div>
  <div class="card mining-details">
   <div class="mining-detail"><span>Mining speed</span><b>10 <small>LTE / hour</small></b></div>

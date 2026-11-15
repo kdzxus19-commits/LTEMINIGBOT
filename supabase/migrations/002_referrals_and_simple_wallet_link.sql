@@ -5,6 +5,9 @@ alter table public.profiles
   add column if not exists referral_code text,
   add column if not exists referred_by bigint references public.profiles(telegram_id) on delete set null;
 
+alter table public.profiles
+  alter column referral_code set default upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 10));
+
 update public.profiles
 set referral_code = upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 10))
 where referral_code is null or referral_code = '';

@@ -427,6 +427,29 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
 @media(prefers-reduced-motion:no-preference){.card{transition:border-color .2s ease,transform .2s ease}.card:active{border-color:#b58c4a66}.brand-mark{animation:softGoldGlow 5s ease-in-out infinite}}
 @keyframes softGoldGlow{0%,100%{box-shadow:0 0 0 4px #d9b56c12,0 5px 18px #0008}50%{box-shadow:0 0 0 5px #d9b56c18,0 5px 22px #d9b56c22}}
 
+/* LIVE SESSION ANALYTICS */
+.analytics-card{padding:19px 17px 16px;background:linear-gradient(145deg,#1b1d21,#111318);border-color:#4a402d}
+.analytics-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.analytics-kicker{font-size:9px;letter-spacing:1.8px;color:#b99a5b;font-weight:800}
+.analytics-head h3{font-size:17px;margin:5px 0 0;color:#f1e5cb}
+.analytics-live{display:flex;align-items:center;gap:6px;border:1px solid #766039;border-radius:20px;padding:6px 9px;color:#e7bd68;font-size:9px;font-weight:800;letter-spacing:1px}
+.analytics-live i,.chart-legend{display:inline-block;width:6px;height:6px;border-radius:50%;background:#e7bd68;box-shadow:0 0 8px #e7bd68}
+.analytics-stats{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:7px}
+.analytics-stats>div{min-width:0;padding:11px 9px;background:#ffffff06;border:1px solid #ffffff0c;border-radius:11px}
+.analytics-stats span{display:block;color:#92949b;font-size:8px;letter-spacing:.7px;line-height:1.4}
+.analytics-stats b{display:block;margin-top:7px;color:#f0d99e;font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.chart-title{display:flex;justify-content:space-between;gap:8px;margin:23px 1px 10px;color:#a8a39a;font-size:9px;font-weight:800;letter-spacing:1px}
+.chart-title span:last-child{color:#777a81;font-weight:600}
+.session-chart{height:126px;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px;align-items:end;padding:0 2px}
+.chart-column{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px;min-width:0}
+.chart-track{height:103px;width:100%;max-width:25px;display:flex;align-items:flex-end;overflow:hidden;border-radius:6px 6px 3px 3px;background:#ffffff0a;border:1px solid #ffffff09}
+.chart-fill{display:block;width:100%;min-height:0;background:linear-gradient(180deg,#f5dfa6,#b88b3e);border-radius:5px 5px 2px 2px;box-shadow:0 0 13px #d5a84b30;transition:height .35s ease}
+.chart-column small{font-size:9px;color:#85878e}
+.chart-foot{display:flex;justify-content:space-between;gap:8px;margin-top:13px;padding-top:11px;border-top:1px solid #ffffff10;color:#898b91;font-size:9px}
+.chart-foot>span:first-child{display:flex;align-items:center;gap:6px}
+.chart-legend{width:7px;height:7px;box-shadow:none}
+@media(max-width:370px){.analytics-card{padding:16px 12px}.analytics-stats{gap:5px}.analytics-stats>div{padding:9px 6px}.analytics-stats span{font-size:7px}.analytics-stats b{font-size:10px}.session-chart{gap:5px}}
+
 </style>
 </head>
 <body>
@@ -462,6 +485,28 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
  <div class="home-metrics">
   <div class="card home-metric"><span class="muted">LIFETIME EARNINGS</span><strong id="earned">0.00 LTE</strong><small>Accumulated demo points</small></div>
   <div class="card home-metric"><span class="muted">SESSION LENGTH</span><strong>8 HRS</strong><small>Per mining session</small></div>
+ </div>
+
+ <div class="home-section-label">LIVE SESSION ANALYTICS</div>
+ <div class="card analytics-card">
+  <div class="analytics-head"><div><span class="analytics-kicker">CURRENT SESSION</span><h3>Mining performance</h3></div><span class="analytics-live"><i></i> LIVE</span></div>
+  <div class="analytics-stats">
+   <div><span>MINED THIS SESSION</span><b id="sessionMined">0.000 LTE</b></div>
+   <div><span>SESSION PROGRESS</span><b id="sessionProgress">0%</b></div>
+   <div><span>MINING RATE</span><b>10 LTE/h</b></div>
+  </div>
+  <div class="chart-title"><span>HOURLY SESSION OUTPUT</span><span>8 HOUR WINDOW</span></div>
+  <div class="session-chart" id="sessionChart" role="img" aria-label="Eight-hour mining session progress">
+   <div class="chart-column"><div class="chart-track"><span class="chart-fill" data-hour="0" style="height:0%"></span></div><small>1h</small></div>
+   <div class="chart-column"><div class="chart-track"><span class="chart-fill" data-hour="1" style="height:0%"></span></div><small>2h</small></div>
+   <div class="chart-column"><div class="chart-track"><span class="chart-fill" data-hour="2" style="height:0%"></span></div><small>3h</small></div>
+   <div class="chart-column"><div class="chart-track"><span class="chart-fill" data-hour="3" style="height:0%"></span></div><small>4h</small></div>
+   <div class="chart-column"><div class="chart-track"><span class="chart-fill" data-hour="4" style="height:0%"></span></div><small>5h</small></div>
+   <div class="chart-column"><div class="chart-track"><span class="chart-fill" data-hour="5" style="height:0%"></span></div><small>6h</small></div>
+   <div class="chart-column"><div class="chart-track"><span class="chart-fill" data-hour="6" style="height:0%"></span></div><small>7h</small></div>
+   <div class="chart-column"><div class="chart-track"><span class="chart-fill" data-hour="7" style="height:0%"></span></div><small>8h</small></div>
+  </div>
+  <div class="chart-foot"><span><i class="chart-legend"></i> Accrued LTE points</span><span id="chartProgressLabel">Waiting for session</span></div>
  </div>
 
  <div class="home-section-label">MINING CENTER</div>
@@ -695,6 +740,20 @@ function render(){
  const liveMined=currentMined();
  const liveBalance=balance+liveMined;
  const liveEarned=earned+liveMined;
+ const sessionElapsed=last?Math.max(0,Math.min(Date.now()-last,MINING_DURATION)):0;
+ const sessionProgress=Math.round(sessionElapsed/MINING_DURATION*100);
+ const sessionMined=currentMined();
+ const sessionMinedEl=document.getElementById('sessionMined');
+ const sessionProgressEl=document.getElementById('sessionProgress');
+ if(sessionMinedEl)sessionMinedEl.textContent=sessionMined.toFixed(3)+' LTE';
+ if(sessionProgressEl)sessionProgressEl.textContent=sessionProgress+'%';
+ document.querySelectorAll('.chart-fill[data-hour]').forEach(bar=>{
+  const hour=Number(bar.dataset.hour);
+  const fill=Math.max(0,Math.min(100,(sessionElapsed-hour*3600000)/3600000*100));
+  bar.style.height=fill+'%';
+ });
+ const chartLabel=document.getElementById('chartProgressLabel');
+ if(chartLabel)chartLabel.textContent=!last?'Waiting for session':sessionElapsed>=MINING_DURATION?'Session completed':sessionProgress+'% completed';
  document.getElementById('balance').textContent=liveBalance.toFixed(4);
  document.getElementById('earned').textContent=liveEarned.toFixed(4)+' LTE';
  document.getElementById('walletBalance').textContent=liveBalance.toFixed(4);

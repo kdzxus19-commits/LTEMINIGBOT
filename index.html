@@ -399,6 +399,7 @@ button:active{transform:translateY(1px) scale(.99)!important;filter:brightness(1
 .account-tab{padding:11px 4px!important;border-radius:8px!important;background:transparent!important;border:1px solid transparent!important;box-shadow:none!important;color:#8e949d!important;font-size:10px!important;letter-spacing:.2px!important}
 .account-tab.active{background:linear-gradient(145deg,#42331b,#211b12)!important;border-color:#9c793e!important;color:#f2dfb5!important;box-shadow:inset 0 1px #fff2!important}
 .profile-avatar{width:68px!important;height:68px!important;border-radius:50%!important;border:2px solid #d5b36c!important;background:#121316 url('assets/lte-mining-logo.svg') center/cover no-repeat!important;box-shadow:0 0 0 5px #d5b36c12,0 8px 20px #0008!important}
+.profile-avatar img{width:100%;height:100%;display:block;object-fit:cover;border-radius:inherit}
 .profile-name{font-family:'Manrope',sans-serif!important;font-size:20px!important;font-weight:800!important;color:#f2e7d1!important}
 .profile-username{font-size:11px!important;color:#969ba4!important}
 .profile-row{padding:13px 0!important;border-bottom:1px solid #ffffff0c!important;font-size:11px!important;color:#9ba0a8!important}
@@ -703,6 +704,15 @@ function setupProfile(){
   nameEl.textContent=name;
   usernameEl.textContent=user.username?'@'+user.username:'Telegram account';
   avatarEl.textContent=(user.first_name||'T').charAt(0).toUpperCase();
+  if(user.photo_url){
+   const photo=document.createElement('img');
+   photo.src=user.photo_url;
+   photo.alt='Telegram profile photo';
+   photo.referrerPolicy='no-referrer';
+   photo.onerror=()=>{photo.remove();avatarEl.textContent=(user.first_name||'T').charAt(0).toUpperCase();};
+   avatarEl.textContent='';
+   avatarEl.appendChild(photo);
+  }
   accountEl.textContent='Telegram user';
   platformEl.textContent='Telegram Mini App';
   const badge=document.querySelector('.profile-badge');

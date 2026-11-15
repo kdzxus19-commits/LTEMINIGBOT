@@ -68,8 +68,8 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 #mining .card{text-align:center;padding:28px 20px}
 #mining .coin{font-size:48px}
 #mining .primary{max-width:320px}
-#tasks .card,#referral .card,#wallet .card,#profile .card{border-color:#35383e}
-#wallet .amount{margin:12px 0}
+#tasks .card,#account-referral .card,#account-wallet .card,#account-profile .card{border-color:#35383e}
+#account-wallet .amount{margin:12px 0}
 @media(min-width:420px){main{padding-left:20px;padding-right:20px}.balance{padding:27px}}
 
 
@@ -224,6 +224,15 @@ nav button.active{color:#f3dca5;background:linear-gradient(180deg,#d5a84b18,tran
 @media(max-width:380px){.home-welcome h2{font-size:20px}.home-metric{padding:14px 11px}.home-metric strong{font-size:17px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
+
+/* Unified Account area: Profile, Wallet and Referrals */
+.account-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:6px;margin:0 0 16px;border:1px solid #39352c;border-radius:15px;background:#111318}
+.account-tab{min-width:0;padding:11px 5px;border:1px solid transparent;border-radius:10px;background:transparent;color:#a9a39a;font-size:11px;box-shadow:none;white-space:nowrap}
+.account-tab.active{color:#f3dfa9;background:#d5a84b18;border-color:#80683d;box-shadow:inset 0 0 0 1px #9b783c22}
+.account-panel{display:none}
+.account-panel.active{display:block;animation:pageEnter .22s ease both}
+.account-panel>h2{display:none}
+
 </style>
 </head>
 <body>
@@ -296,26 +305,37 @@ nav button.active{color:#f3dca5;background:linear-gradient(180deg,#d5a84b18,tran
  <p class="tasks-note">Only the daily check-in is active right now. Other tasks are not yet available.</p>
 </section>
 
-<section id="referral" class="page">
- <h2>Invite Friends</h2>
- <div class="card invite-hero">
-  <div class="invite-art">♧</div>
-  <div class="invite-eyebrow">GROW THE LTE COMMUNITY</div>
-  <h3>Mining is better together.</h3>
-  <p class="muted">Invite friends to join LTE Mining. The referral program will become available after Telegram integration is completed.</p>
-  <div class="invite-status"><span class="invite-status-dot"></span> REFERRALS NOT ACTIVE YET</div>
-  <button class="primary invite-disabled" disabled>INVITE LINK — COMING SOON</button>
- </div>
- <div class="card invite-steps">
-  <div class="invite-step"><span>01</span><div><b>Your personal link</b><p class="muted">A unique Telegram invite link will be generated for your account.</p></div></div>
-  <div class="invite-step"><span>02</span><div><b>Friends join</b><p class="muted">Friends will be able to open the mini app through your link.</p></div></div>
-  <div class="invite-step"><span>03</span><div><b>Referral rewards</b><p class="muted">Reward rules will be shown here once the referral system is implemented.</p></div></div>
- </div>
- <p class="invite-note">No referral rewards are being issued at this time.</p>
-</section>
 
-<section id="wallet" class="page">
- <h2>My Wallet</h2>
+
+
+
+
+<section id="account" class="page">
+ <h2>My Account</h2>
+ <div class="account-tabs" role="tablist" aria-label="Account sections">
+  <button class="account-tab active" type="button" onclick="showAccountPanel('profile',this)">👤 Profile</button>
+  <button class="account-tab" type="button" onclick="showAccountPanel('wallet',this)">💳 Wallet</button>
+  <button class="account-tab" type="button" onclick="showAccountPanel('referral',this)">👥 Referrals</button>
+ </div>
+ <div id="account-profile" class="account-panel active"><h2>My Profile</h2>
+ <div class="card profile-hero">
+  <div class="profile-avatar" id="profileAvatar">L</div>
+  <div class="profile-name" id="profileName">LTE Miner</div>
+  <div class="profile-username" id="profileUsername">@guest_account</div>
+  <span class="profile-badge"><i></i> DEMO ACCOUNT</span>
+ </div>
+ <div class="card profile-info">
+  <div class="profile-row"><span>Account</span><b id="profileAccount">Guest user</b></div>
+  <div class="profile-row"><span>Platform</span><b id="profilePlatform">Web preview</b></div>
+  <div class="profile-row"><span>Mining status</span><b id="profileMiningStatus">Inactive</b></div>
+ </div>
+ <div class="card profile-menu">
+  <div class="profile-menu-item"><span class="profile-menu-icon">◇</span><div><b>Account security</b><p class="muted">Server verification will be added with backend integration.</p></div><span class="profile-soon">PENDING</span></div>
+  <div class="profile-menu-item"><span class="profile-menu-icon">⚙</span><div><b>Preferences</b><p class="muted">More account settings are coming soon.</p></div><span class="profile-soon">SOON</span></div>
+  <div class="profile-menu-item"><span class="profile-menu-icon">ⓘ</span><div><b>About LTE Mining</b><p class="muted">Mining points demo • Version 1.0</p></div></div>
+ </div>
+ <p class="profile-disclaimer">Your current balance and mining progress are demo data stored on this device. They are not verified account assets.</p></div>
+ <div id="account-wallet" class="account-panel"><h2>My Wallet</h2>
  <div class="card wallet-hero">
   <div class="wallet-topline"><span>LTE MINING WALLET</span><span class="wallet-chip">DEMO</span></div>
   <p class="muted wallet-label">AVAILABLE BALANCE</p>
@@ -342,28 +362,22 @@ nav button.active{color:#f3dca5;background:linear-gradient(180deg,#d5a84b18,tran
   <div><b>Withdraw funds</b><p class="muted">Real cryptocurrency withdrawals are not available yet.</p></div>
   <button onclick="alert('Real withdrawals are not enabled.')">Coming Soon</button>
  </div>
- <p class="wallet-disclaimer">LTE points are demo points, not real cryptocurrency or a monetary balance.</p>
-</section>
-
-<section id="profile" class="page">
- <h2>My Profile</h2>
- <div class="card profile-hero">
-  <div class="profile-avatar" id="profileAvatar">L</div>
-  <div class="profile-name" id="profileName">LTE Miner</div>
-  <div class="profile-username" id="profileUsername">@guest_account</div>
-  <span class="profile-badge"><i></i> DEMO ACCOUNT</span>
+ <p class="wallet-disclaimer">LTE points are demo points, not real cryptocurrency or a monetary balance.</p></div>
+ <div id="account-referral" class="account-panel"><h2>Invite Friends</h2>
+ <div class="card invite-hero">
+  <div class="invite-art">♧</div>
+  <div class="invite-eyebrow">GROW THE LTE COMMUNITY</div>
+  <h3>Mining is better together.</h3>
+  <p class="muted">Invite friends to join LTE Mining. The referral program will become available after Telegram integration is completed.</p>
+  <div class="invite-status"><span class="invite-status-dot"></span> REFERRALS NOT ACTIVE YET</div>
+  <button class="primary invite-disabled" disabled>INVITE LINK — COMING SOON</button>
  </div>
- <div class="card profile-info">
-  <div class="profile-row"><span>Account</span><b id="profileAccount">Guest user</b></div>
-  <div class="profile-row"><span>Platform</span><b id="profilePlatform">Web preview</b></div>
-  <div class="profile-row"><span>Mining status</span><b id="profileMiningStatus">Inactive</b></div>
+ <div class="card invite-steps">
+  <div class="invite-step"><span>01</span><div><b>Your personal link</b><p class="muted">A unique Telegram invite link will be generated for your account.</p></div></div>
+  <div class="invite-step"><span>02</span><div><b>Friends join</b><p class="muted">Friends will be able to open the mini app through your link.</p></div></div>
+  <div class="invite-step"><span>03</span><div><b>Referral rewards</b><p class="muted">Reward rules will be shown here once the referral system is implemented.</p></div></div>
  </div>
- <div class="card profile-menu">
-  <div class="profile-menu-item"><span class="profile-menu-icon">◇</span><div><b>Account security</b><p class="muted">Server verification will be added with backend integration.</p></div><span class="profile-soon">PENDING</span></div>
-  <div class="profile-menu-item"><span class="profile-menu-icon">⚙</span><div><b>Preferences</b><p class="muted">More account settings are coming soon.</p></div><span class="profile-soon">SOON</span></div>
-  <div class="profile-menu-item"><span class="profile-menu-icon">ⓘ</span><div><b>About LTE Mining</b><p class="muted">Mining points demo • Version 1.0</p></div></div>
- </div>
- <p class="profile-disclaimer">Your current balance and mining progress are demo data stored on this device. They are not verified account assets.</p>
+ <p class="invite-note">No referral rewards are being issued at this time.</p></div>
 </section>
 </main>
 
@@ -371,9 +385,7 @@ nav button.active{color:#f3dca5;background:linear-gradient(180deg,#d5a84b18,tran
  <button class="active" onclick="showPage('home',this)">🏠<br>Home</button>
  <button onclick="showPage('mining',this)">⚡<br>Mining</button>
  <button onclick="showPage('tasks',this)">🎯<br>Tasks</button>
- <button onclick="showPage('referral',this)">👥<br>Invite</button>
- <button onclick="showPage('wallet',this)">💰<br>Wallet</button>
- <button onclick="showPage('profile',this)">👤<br>You</button>
+ <button onclick="showPage('account',this)">👤<br>Account</button>
 </nav>
 
 <script id="tonconnect-sdk-script" src="https://unpkg.com/@tonconnect/ui@5.0.3/dist/tonconnect-ui.min.js"></script>
@@ -461,6 +473,14 @@ function showPage(id,btn){
  document.getElementById(id).classList.add('active');
  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
  btn.classList.add('active');
+ if(id==='account')showAccountPanel('profile',document.querySelector('.account-tab'));
+}
+function showAccountPanel(id,btn){
+ document.querySelectorAll('.account-panel').forEach(p=>p.classList.remove('active'));
+ const panel=document.getElementById('account-'+id);
+ if(panel)panel.classList.add('active');
+ document.querySelectorAll('.account-tab').forEach(b=>b.classList.remove('active'));
+ if(btn)btn.classList.add('active');
 }
 function tick(){
  const timer=document.getElementById('timer');

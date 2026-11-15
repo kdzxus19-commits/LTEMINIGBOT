@@ -95,29 +95,82 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json();
-    if (body?.action !== "sync-profile") return json({ success: false, error: "Unknown action" }, 400);
-
-    const user = await verifyTelegramInitData(body.initData, botToken);
+    const user = await verifyTelegramInitData(body?.initData, botToken);
+    const telegramId = Number(user.id);
     const supabase = createClient(supabaseUrl, serviceRoleKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
 
-    const { error } = await supabase.from("profiles").upsert({
-      telegram_id: Number(user.id),
-      username: user.username ?? null,
-    }, { onConflict: "telegram_id", ignoreDuplicates: false });
+    if (body?.action === "sync-profile") {
+      const { error } = await supabase.from("profiles").upsert({
+        telegram_id: telegramId,
+        username: user.username ?? null,
+      }, { onConflict: "telegram_id", ignoreDuplicates: false });
 
-    if (error) {
-      console.error("Profile upsert failed:", error.message);
-      return json({ success: false, error: "Could not save Telegram profile" }, 500);
+      if (error) {
+        console.error("Profile upsert failed:", error.message);
+        return json({ success: false, error: "Could not save Telegram profile" }, 500);
+      }
+
+      return json({
+        success: true,
+        message: "Telegram account verified and profile synchronized",
+        telegram_id: telegramId,
+        username: user.username ?? null,
+      });
     }
 
-    return json({
-      success: true,
-      message: "Telegram account verified and profile synchronized",
-      telegram_id: Number(user.id),
-      username: user.username ?? null,
-    });
+    if (body?.action === "create-wallet-challenge") {
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("telegram_id")
+        .eq("telegram_id", telegramId)
+        .maybeSingle();
+
+      if (profileError || !profile) {
+        return json({ success: false, error: "Telegram profile not found. Sync profile first." }, 404);
+      }
+
+      // TON Connect ton_proof payload: fresh 32-byte random nonce, valid for 10 minutes.
+      const randomBytes = crypto.getRandomValues(new Uint8Array(32));
+      const payload = [...randomBytes].map((b) => b.toString(16).padStart(2, "0")).join("");
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+
+      // Invalidate older unused challenges for this Telegram account.
+      const { error: cleanupError } = await supabase
+        .from("wallet_link_challenges")
+        .delete()
+        .eq("telegram_id", telegramId)
+        .is("consumed_at", null);
+
+      if (cleanupError) {
+        console.error("Challenge cleanup failed:", cleanupError.message);
+        return json({ success: false, error: "Could not prepare wallet challenge" }, 500);
+      }
+
+      const { error: insertError } = await supabase
+        .from("wallet_link_challenges")
+        .insert({
+          telegram_id: telegramId,
+          payload,
+          expires_at: expiresAt,
+        });
+
+      if (insertError) {
+        console.error("Challenge insert failed:", insertError.message);
+        return json({ success: false, error: "Could not create wallet challenge" }, 500);
+      }
+
+      return json({
+        success: true,
+        action: "create-wallet-challenge",
+        payload,
+        expires_at: expiresAt,
+        message: "One-time TON Proof challenge created",
+      });
+    }
+
+    return json({ success: false, error: "Unknown action" }, 400);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Request failed";
     return json({ success: false, error: message }, 401);

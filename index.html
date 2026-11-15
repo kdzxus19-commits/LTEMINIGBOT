@@ -688,9 +688,12 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
   <div class="invite-art">♧</div>
   <div class="invite-eyebrow">GROW THE LTE COMMUNITY</div>
   <h3>Mining is better together.</h3>
-  <p class="muted">Invite friends to join LTE Mining. The referral program will become available after Telegram integration is completed.</p>
-  <div class="invite-status"><span class="invite-status-dot"></span> REFERRALS NOT ACTIVE YET</div>
-  <button class="primary invite-disabled" disabled>INVITE LINK — COMING SOON</button>
+  <p class="muted">Invite friends. When a friend links a TON wallet, you receive 50 LTE. No welcome reward.</p>
+  <div class="invite-status"><span class="invite-status-dot"></span> 50 LTE PER WALLET LINK</div>
+  <div class="invite-step"><span>CODE</span><div><b id="myReferralCode">Loading…</b><p class="muted">Your personal invite code</p></div></div>
+  <div class="invite-step"><span>LINK</span><div style="min-width:0;flex:1"><input id="myReferralLink" readonly value="Open inside Telegram to load your link" style="font-size:10px"></div></div>
+  <button class="primary" id="copyReferralLink" type="button">COPY INVITE LINK</button>
+  <div class="invite-status" style="margin-top:15px">QUALIFIED REFERRALS: <b id="qualifiedReferralCount">0</b></div>
  </div>
  <div class="card invite-steps">
   <div class="invite-step"><span>01</span><div><b>Your personal link</b><p class="muted">A unique Telegram invite link will be generated for your account.</p></div></div>
@@ -943,7 +946,7 @@ async function checkLteBackend(){
      'apikey':SUPABASE_PUBLISHABLE_KEY,
      'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY
     },
-    body:JSON.stringify({action:'sync-profile',initData})
+    body:JSON.stringify({action:'sync-profile',initData,referralCode:(window.Telegram?.WebApp?.initDataUnsafe?.start_param||'').replace(/^ref_/,'')})
    });
    const syncData=await syncResponse.json();
    if(!syncResponse.ok||!syncData.success)throw new Error(syncData.error||'Account sync failed');
@@ -959,62 +962,72 @@ async function checkLteBackend(){
 }
 window.lteBackendReady=checkLteBackend();
 
-// TON Connect: request a one-time server challenge for ton_proof.
-// The proof is NOT considered verified until the backend cryptographically checks it.
+// Simple TON Connect: link the public wallet address without TON Proof.
 (async function initTonConnect(){
  const statusEl=document.getElementById('tonWalletStatus');
- if(!statusEl)return;
- if(!window.TON_CONNECT_UI||!window.TON_CONNECT_UI.TonConnectUI){statusEl.textContent='TON Connect could not load. Please refresh and try again.';return;}
- const initData=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp.initData:'';
- if(!initData){statusEl.textContent='Open LTE Mining inside Telegram to securely prepare wallet linking.';return;}
+ const buttonRoot=document.getElementById('ton-connect');
+ if(!statusEl||!buttonRoot)return;
+ if(!window.TON_CONNECT_UI||!window.TON_CONNECT_UI.TonConnectUI){statusEl.textContent='TON Connect could not load. Please refresh.';return;}
+ const webApp=window.Telegram&&window.Telegram.WebApp;
+ const initData=webApp?webApp.initData:'';
+ if(!initData){statusEl.textContent='Open LTE Mining inside Telegram to link your wallet.';return;}
  try{
   await window.lteBackendReady;
-  async function prepareProofChallenge(){
+  if(!document.getElementById('backendStatus').textContent.includes('Telegram account verified')){
+   throw new Error('Telegram account is not synchronized. Reopen the Mini App.');
+  }
+  const api=async(action,extra={})=>{
    const response=await fetch(SUPABASE_URL+'/functions/v1/lte-mining-api',{
     method:'POST',
-    headers:{
-     'Content-Type':'application/json',
-     'apikey':SUPABASE_PUBLISHABLE_KEY,
-     'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY
-    },
-    body:JSON.stringify({action:'create-wallet-challenge',initData})
+    headers:{'Content-Type':'application/json','apikey':SUPABASE_PUBLISHABLE_KEY,'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY},
+    body:JSON.stringify({action,initData,...extra})
    });
    const data=await response.json();
-   if(!response.ok||!data.success||!data.payload)throw new Error(data.error||'Could not prepare wallet proof');
-   return data.payload;
+   if(!response.ok||!data.success)throw new Error(data.error||'Request failed');
+   return data;
+  };
+  async function loadReferralInfo(){
+   try{
+    const data=await api('get-referrals');
+    const codeEl=document.getElementById('myReferralCode');
+    const countEl=document.getElementById('qualifiedReferralCount');
+    const linkEl=document.getElementById('myReferralLink');
+    if(codeEl)codeEl.textContent=data.referral_code||'—';
+    if(countEl)countEl.textContent=String(data.qualified_count||0);
+    if(linkEl&&data.referral_code){
+     const link='https://t.me/lteminingbot?startapp='+encodeURIComponent(data.referral_code);
+     linkEl.value=link;
+     const copyBtn=document.getElementById('copyReferralLink');
+     if(copyBtn)copyBtn.onclick=()=>{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(link).then(()=>alert('Referral link copied!')).catch(()=>alert(link));}else{linkEl.select();document.execCommand('copy');alert('Referral link copied!');}};
+    }
+   }catch(error){console.warn('Referral info unavailable:',error);}
   }
-  if(!window.lteBackendReady||!document.getElementById('backendStatus').textContent.includes('Telegram account verified')){
-   throw new Error('Telegram profile is not synchronized yet. Reopen the Mini App and try again.');
+  async function saveWallet(address){
+   try{
+    const data=await api('link-wallet',{address});
+    statusEl.textContent='Wallet linked · '+address.slice(0,6)+'…'+address.slice(-6);
+    statusEl.dataset.address=address;
+    if(data.referral_rewarded)alert('Referral qualified! The inviter received 50 LTE.');
+    await loadReferralInfo();
+   }catch(error){
+    statusEl.textContent=error.message||'Could not save wallet address.';
+   }
   }
-  let payload=await prepareProofChallenge();
   const tonConnectUI=new TON_CONNECT_UI.TonConnectUI({
    manifestUrl:'https://kdzxus19-commits.github.io/LTEMINIGBOT/tonconnect-manifest.json',
    buttonRootId:'ton-connect',
    uiPreferences:{theme:'DARK',borderRadius:'s'},
    analytics:{mode:'off'}
   });
-  tonConnectUI.setConnectRequestParameters({state:'ready',value:{tonProof:payload}});
-  const shortAddress=a=>a?a.slice(0,6)+'…'+a.slice(-6):'';
   tonConnectUI.onStatusChange(wallet=>{
-   if(wallet&&wallet.account&&wallet.account.address){
-    const address=wallet.account.address;
-    statusEl.textContent='Connected: '+shortAddress(address)+' · Proof pending server verification';
-    statusEl.dataset.address=address;
-    const item=wallet.connectItems&&wallet.connectItems.tonProof;
-    if(item&&item.proof){
-     statusEl.textContent='TON Proof received · Backend verification is not enabled yet';
-    }else if(item&&item.error){
-     statusEl.textContent='Wallet connected, but this wallet did not provide TON Proof.';
-    }
-   }else{
-    statusEl.textContent='Wallet not connected.';
-    delete statusEl.dataset.address;
-   }
-  },error=>{statusEl.textContent='Connection status unavailable. Please try again.';});
-  tonConnectUI.connectionRestored.catch(()=>{statusEl.textContent='Could not restore wallet connection. Reconnect to request a fresh TON Proof.';});
-  statusEl.textContent='Secure wallet challenge ready. Connect your TON wallet.';
- }catch(e){
-  statusEl.textContent=e&&e.message?e.message:'Could not prepare secure wallet linking. Please refresh the app.';
+   if(wallet&&wallet.account&&wallet.account.address)saveWallet(wallet.account.address);
+   else{statusEl.textContent='Wallet not connected.';delete statusEl.dataset.address;}
+  },()=>{statusEl.textContent='Connection status unavailable. Please try again.';});
+  tonConnectUI.connectionRestored.catch(()=>{statusEl.textContent='Could not restore wallet connection. Reconnect to try again.';});
+  statusEl.textContent='Connect your TON wallet to link its public address.';
+  await loadReferralInfo();
+ }catch(error){
+  statusEl.textContent=error&&error.message?error.message:'Could not initialize wallet connection.';
  }
 })();
 </script>

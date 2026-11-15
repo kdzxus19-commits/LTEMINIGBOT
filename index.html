@@ -459,7 +459,7 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
 
 <header>
  <div class="logo"><img class="brand-mark" src="assets/lte-mining-logo.svg" alt="LTE Mining Shadow Miner logo"><span class="brand-wordmark">LTE MINING<small>MINE • EARN • GROW</small></span></div>
- <div class="pill">● BETA PREVIEW</div>
+ <div class="pill" id="headerUserPill">● GUEST ACCOUNT</div>
 </header>
 
 <main>
@@ -691,8 +691,10 @@ function setupProfile(){
  const avatarEl=document.getElementById('profileAvatar');
  const accountEl=document.getElementById('profileAccount');
  const platformEl=document.getElementById('profilePlatform');
+ const headerUserPill=document.getElementById('headerUserPill');
  if(user){
   const name=[user.first_name,user.last_name].filter(Boolean).join(' ')||'Telegram user';
+  if(headerUserPill)headerUserPill.textContent=user.username?'@'+user.username:'● TELEGRAM USER';
   nameEl.textContent=name;
   usernameEl.textContent=user.username?'@'+user.username:'Telegram account';
   avatarEl.textContent=(user.first_name||'T').charAt(0).toUpperCase();
@@ -701,6 +703,7 @@ function setupProfile(){
   const badge=document.querySelector('.profile-badge');
   if(badge)badge.innerHTML='<i></i> TELEGRAM PREVIEW';
  }else{
+  if(headerUserPill)headerUserPill.textContent='● GUEST ACCOUNT';
   nameEl.textContent='LTE Miner';
   usernameEl.textContent='@guest_account';
   avatarEl.textContent='L';

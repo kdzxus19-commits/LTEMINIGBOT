@@ -533,33 +533,65 @@ async function checkLteBackend(){
   el.style.color='#d9a36b';
  }
 }
-checkLteBackend();
+window.lteBackendReady=checkLteBackend();
 
-// TON Connect: wallet linking only. No transaction or payment is requested here.
-(function initTonConnect(){
+// TON Connect: request a one-time server challenge for ton_proof.
+// The proof is NOT considered verified until the backend cryptographically checks it.
+(async function initTonConnect(){
  const statusEl=document.getElementById('tonWalletStatus');
  if(!statusEl)return;
  if(!window.TON_CONNECT_UI||!window.TON_CONNECT_UI.TonConnectUI){statusEl.textContent='TON Connect could not load. Please refresh and try again.';return;}
+ const initData=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp.initData:'';
+ if(!initData){statusEl.textContent='Open LTE Mining inside Telegram to securely prepare wallet linking.';return;}
  try{
+  await window.lteBackendReady;
+  async function prepareProofChallenge(){
+   const response=await fetch(SUPABASE_URL+'/functions/v1/lte-mining-api',{
+    method:'POST',
+    headers:{
+     'Content-Type':'application/json',
+     'apikey':SUPABASE_PUBLISHABLE_KEY,
+     'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY
+    },
+    body:JSON.stringify({action:'create-wallet-challenge',initData})
+   });
+   const data=await response.json();
+   if(!response.ok||!data.success||!data.payload)throw new Error(data.error||'Could not prepare wallet proof');
+   return data.payload;
+  }
+  if(!window.lteBackendReady||!document.getElementById('backendStatus').textContent.includes('Telegram account verified')){
+   throw new Error('Telegram profile is not synchronized yet. Reopen the Mini App and try again.');
+  }
+  let payload=await prepareProofChallenge();
   const tonConnectUI=new TON_CONNECT_UI.TonConnectUI({
    manifestUrl:'https://kdzxus19-commits.github.io/LTEMINIGBOT/tonconnect-manifest.json',
    buttonRootId:'ton-connect',
    uiPreferences:{theme:'DARK',borderRadius:'s'},
    analytics:{mode:'off'}
   });
-  const shortAddress=a=>a? a.slice(0,6)+'…'+a.slice(-6):'';
+  tonConnectUI.setConnectRequestParameters({state:'ready',value:{tonProof:payload}});
+  const shortAddress=a=>a?a.slice(0,6)+'…'+a.slice(-6):'';
   tonConnectUI.onStatusChange(wallet=>{
    if(wallet&&wallet.account&&wallet.account.address){
     const address=wallet.account.address;
-    statusEl.textContent='Connected: '+shortAddress(address)+' · '+(wallet.account.chain=== '-239'?'TON Mainnet':'TON network');
+    statusEl.textContent='Connected: '+shortAddress(address)+' · Proof pending server verification';
     statusEl.dataset.address=address;
+    const item=wallet.connectItems&&wallet.connectItems.tonProof;
+    if(item&&item.proof){
+     statusEl.textContent='TON Proof received · Backend verification is not enabled yet';
+    }else if(item&&item.error){
+     statusEl.textContent='Wallet connected, but this wallet did not provide TON Proof.';
+    }
    }else{
     statusEl.textContent='Wallet not connected.';
     delete statusEl.dataset.address;
    }
   },error=>{statusEl.textContent='Connection status unavailable. Please try again.';});
-  tonConnectUI.connectionRestored.catch(()=>{statusEl.textContent='Could not restore wallet connection. You can connect again.';});
- }catch(e){statusEl.textContent='TON Connect initialization failed. Please refresh the app.';}
+  tonConnectUI.connectionRestored.catch(()=>{statusEl.textContent='Could not restore wallet connection. Reconnect to request a fresh TON Proof.';});
+  statusEl.textContent='Secure wallet challenge ready. Connect your TON wallet.';
+ }catch(e){
+  statusEl.textContent=e&&e.message?e.message:'Could not prepare secure wallet linking. Please refresh the app.';
+ }
 })();
 </script>
 </body>

@@ -466,12 +466,18 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
 <main>
 <section id="home" class="page active">
  <div class="home-welcome"><div><div class="eyebrow">YOUR MINING DASHBOARD</div><h2>Welcome to LTE Mining</h2><p class="muted">Track your points and session progress in one place.</p></div><span class="preview-tag">PREVIEW</span></div>
- <div class="card balance">
-  <div class="muted">TOTAL LTE BALANCE</div>
-  <div class="coin">◈</div>
-  <div class="amount" id="balance">0.00</div>
-  <div class="muted">LTE POINTS</div>
- </div
+ <div class="card balance balance-premium">
+  <div class="balance-topline">
+   <div><div class="balance-heading">TOTAL LTE BALANCE</div><div class="balance-caption">YOUR MINING ASSETS</div></div>
+   <span class="balance-status"><i></i> ACCOUNT BALANCE</span>
+  </div>
+  <div class="balance-value-row">
+   <div class="amount" id="balance">0.00</div>
+   <span class="balance-unit">LTE</span>
+   <div class="coin" aria-hidden="true">◈</div>
+  </div>
+  <div class="balance-bottomline"><span>MINING REWARDS</span><span class="balance-secure">◈ DIGITAL POINTS</span></div>
+ </div>
 
  <div class="home-section-label">MINING CENTER</div>
  <h2>Mining Center</h2>
@@ -932,3 +938,23 @@ window.lteBackendReady=checkLteBackend();
 </body>
   </html>
   
+
+
+/* Premium total balance card */
+.balance-premium{min-height:190px!important;padding:22px 22px 18px!important;border-radius:22px!important;position:relative!important;overflow:hidden!important;background:radial-gradient(ellipse at 92% 4%,#e7bd6825,transparent 34%),linear-gradient(128deg,#302719 0%,#1d1b18 48%,#11151a 100%)!important;border:1px solid #c49a4d88!important;box-shadow:0 18px 42px #0009,inset 0 1px #fff2,inset 0 -1px #d8ad5b22!important}
+.balance-premium:before{content:"";position:absolute;inset:7px;border:1px solid #e5c47b18;border-radius:16px;pointer-events:none}
+.balance-premium:after{content:"";position:absolute;width:190px;height:190px;right:-95px;bottom:-125px;border:1px solid #e6bd6b30;border-radius:50%;box-shadow:0 0 0 16px #d5a84b08,0 0 0 34px #d5a84b06;pointer-events:none}
+.balance-premium>*{position:relative;z-index:1}
+.balance-topline{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.balance-heading{font-size:11px;font-weight:800;letter-spacing:1.8px;color:#ead39f}
+.balance-caption{margin-top:5px;font-size:9px;font-weight:600;letter-spacing:1.4px;color:#938b7b}
+.balance-status{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid #d7b56b38;border-radius:30px;background:#d5ad5b10;color:#d8c18f;font-size:8px;font-weight:800;letter-spacing:.8px;white-space:nowrap}
+.balance-status i{width:6px;height:6px;border-radius:50%;background:#d6b15e;box-shadow:0 0 8px #e5bd65;display:inline-block}
+.balance-value-row{display:flex;align-items:center;gap:9px;margin-top:20px}
+.balance-premium .amount{font-size:clamp(38px,10vw,49px)!important;line-height:1!important;letter-spacing:-2px!important;color:#fff0c9!important;text-shadow:0 3px 22px #d6ad5a30!important}
+.balance-unit{align-self:flex-end;margin-bottom:4px;color:#c6a45f;font-size:12px;font-weight:900;letter-spacing:1.5px}
+.balance-premium .coin{width:43px!important;height:43px!important;flex:0 0 43px;margin:0 0 0 auto!important;border:1px solid #f0d58d!important;box-shadow:0 5px 16px #0009,0 0 20px #d9b56c30!important}
+.balance-bottomline{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:17px;padding-top:11px;border-top:1px solid #d9bd7a25;color:#918875;font-size:8px;font-weight:800;letter-spacing:1.5px}
+.balance-secure{color:#c7ad76;white-space:nowrap}
+@media(max-width:360px){.balance-premium{padding:19px 16px 16px!important}.balance-status{font-size:7px;padding:5px 7px}.balance-premium .amount{font-size:37px!important}.balance-premium .coin{width:37px!important;height:37px!important;flex-basis:37px}}
+

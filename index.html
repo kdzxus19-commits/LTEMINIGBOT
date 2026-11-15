@@ -151,6 +151,28 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 .invite-step b{font-size:12px;color:#eee0c2}
 .invite-step p{font-size:10px;line-height:1.55;margin:4px 0 0}
 
+
+/* PREMIUM GOLD PROFILE */
+.profile-hero{text-align:center;padding:27px 20px 23px;background:radial-gradient(ellipse at 50% 0%,#51401f55,transparent 60%),linear-gradient(145deg,#272319,#15171c 75%);border-color:#80663a}
+.profile-avatar{width:76px;height:76px;margin:0 auto 14px;border-radius:25px;display:grid;place-items:center;background:linear-gradient(145deg,#e6c77f,#9a7130);border:2px solid #f1dca5;color:#1b1710;font-size:31px;font-weight:900;box-shadow:0 7px 24px #d1a54b35}
+.profile-name{font-size:21px;font-weight:800;color:#f2e5c7}
+.profile-username{font-size:12px;color:#aaa69b;margin-top:5px}
+.profile-badge{display:inline-flex;align-items:center;gap:7px;margin-top:16px;padding:7px 11px;border-radius:25px;background:#c7a05216;border:1px solid #80663a;color:#d9c28d;font-size:9px;font-weight:800;letter-spacing:1.2px}
+.profile-badge i{width:6px;height:6px;border-radius:50%;background:#d5b46e}
+.profile-info{padding:6px 18px}
+.profile-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #ffffff10;font-size:12px;color:#a9abb1}
+.profile-row:last-child{border-bottom:0}
+.profile-row b{font-size:12px;color:#eadbb9;text-align:right}
+.profile-menu{padding:3px 17px}
+.profile-menu-item{display:flex;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid #ffffff10}
+.profile-menu-item:last-child{border-bottom:0}
+.profile-menu-icon{width:34px;height:34px;flex:0 0 34px;border-radius:11px;display:grid;place-items:center;background:#c9a05216;border:1px solid #705b37;color:#e3ca8c;font-size:17px}
+.profile-menu-item>div{flex:1;min-width:0}
+.profile-menu-item b{font-size:12px;color:#eee1c4}
+.profile-menu-item p{font-size:10px;line-height:1.5;margin:4px 0 0}
+.profile-soon{font-size:8px;font-weight:800;letter-spacing:.8px;color:#c4ad7c;border:1px solid #655535;border-radius:20px;padding:5px 6px}
+.profile-disclaimer{text-align:center;color:#777a82;font-size:10px;line-height:1.6;padding:0 15px 10px}
+
 </style>
 </head>
 <body>
@@ -264,12 +286,24 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 </section>
 
 <section id="profile" class="page">
- <h2>👤 Profile</h2>
- <div class="card">
-  <p>Project: LTE Mining</p>
-  <p class="muted">Demo account</p>
-  <p class="muted">Telegram integration: Pending</p>
+ <h2>My Profile</h2>
+ <div class="card profile-hero">
+  <div class="profile-avatar" id="profileAvatar">L</div>
+  <div class="profile-name" id="profileName">LTE Miner</div>
+  <div class="profile-username" id="profileUsername">@guest_account</div>
+  <span class="profile-badge"><i></i> DEMO ACCOUNT</span>
  </div>
+ <div class="card profile-info">
+  <div class="profile-row"><span>Account</span><b id="profileAccount">Guest user</b></div>
+  <div class="profile-row"><span>Platform</span><b id="profilePlatform">Web preview</b></div>
+  <div class="profile-row"><span>Mining status</span><b id="profileMiningStatus">Inactive</b></div>
+ </div>
+ <div class="card profile-menu">
+  <div class="profile-menu-item"><span class="profile-menu-icon">◇</span><div><b>Account security</b><p class="muted">Server verification will be added with backend integration.</p></div><span class="profile-soon">PENDING</span></div>
+  <div class="profile-menu-item"><span class="profile-menu-icon">⚙</span><div><b>Preferences</b><p class="muted">More account settings are coming soon.</p></div><span class="profile-soon">SOON</span></div>
+  <div class="profile-menu-item"><span class="profile-menu-icon">ⓘ</span><div><b>About LTE Mining</b><p class="muted">Mining points demo • Version 1.0</p></div></div>
+ </div>
+ <p class="profile-disclaimer">Your current balance and mining progress are demo data stored on this device. They are not verified account assets.</p>
 </section>
 </main>
 
@@ -319,6 +353,30 @@ function daily(){
  render();
  alert('50 LTE points added!');
 }
+function setupProfile(){
+ const user=window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initDataUnsafe?window.Telegram.WebApp.initDataUnsafe.user:null;
+ const nameEl=document.getElementById('profileName');
+ const usernameEl=document.getElementById('profileUsername');
+ const avatarEl=document.getElementById('profileAvatar');
+ const accountEl=document.getElementById('profileAccount');
+ const platformEl=document.getElementById('profilePlatform');
+ if(user){
+  const name=[user.first_name,user.last_name].filter(Boolean).join(' ')||'Telegram user';
+  nameEl.textContent=name;
+  usernameEl.textContent=user.username?'@'+user.username:'Telegram account';
+  avatarEl.textContent=(user.first_name||'T').charAt(0).toUpperCase();
+  accountEl.textContent='Telegram user';
+  platformEl.textContent='Telegram Mini App';
+  const badge=document.querySelector('.profile-badge');
+  if(badge)badge.innerHTML='<i></i> TELEGRAM PREVIEW';
+ }else{
+  nameEl.textContent='LTE Miner';
+  usernameEl.textContent='@guest_account';
+  avatarEl.textContent='L';
+  accountEl.textContent='Guest user';
+  platformEl.textContent='Web preview';
+ }
+}
 function render(){
  document.getElementById('balance').textContent=balance.toFixed(2);
  document.getElementById('earned').textContent=earned.toFixed(2)+' LTE';
@@ -331,6 +389,8 @@ function render(){
  if(dailyStatus){dailyStatus.textContent=claimed?'Claimed today':'Available today';}
  const active=end>Date.now();
  document.getElementById('status').textContent=active?'Mining':'Inactive';
+ const profileMiningStatus=document.getElementById('profileMiningStatus');
+ if(profileMiningStatus)profileMiningStatus.textContent=active?'Active':'Inactive';
  document.getElementById('mineBtn').disabled=active;
  document.getElementById('mineBtn').textContent=active?'MINING ACTIVE':'⚡ START MINING';
 }
@@ -357,6 +417,7 @@ function tick(){
   ring.style.setProperty('--progress','0%');
  }
 }
+setupProfile();
 render();
 tick();
 setInterval(tick,1000);

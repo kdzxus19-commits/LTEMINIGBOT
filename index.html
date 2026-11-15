@@ -113,6 +113,44 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 .wallet-disclaimer{text-align:center;color:#777a82;font-size:10px;line-height:1.6;padding:0 15px 10px}
 @media(max-width:360px){.wallet-withdraw{align-items:flex-start;flex-direction:column}.wallet-withdraw button{width:100%}}
 
+
+/* PREMIUM GOLD TASKS & INVITE */
+.tasks-feature{padding:21px;background:radial-gradient(ellipse at 100% 0%,#57431d55,transparent 45%),linear-gradient(145deg,#282319,#17191e 70%);border-color:#81683b}
+.tasks-top{display:flex;align-items:center;justify-content:space-between}
+.tasks-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#d2ad5b1c;border:1px solid #80683d;color:#f3d99b;font-size:22px}
+.tasks-tag,.tasks-section-title{font-size:10px;letter-spacing:1.6px;font-weight:800;color:#cbb27a}
+.tasks-feature h3{font-size:20px;color:#f1e3c5;margin:19px 0 7px}
+.tasks-feature>.muted{font-size:12px;line-height:1.6}
+.task-reward{display:flex;align-items:baseline;gap:9px;margin:21px 0;padding:14px 0;border-top:1px solid #ffffff14;border-bottom:1px solid #ffffff14}
+.task-reward strong{font-size:36px;color:#f1d895}
+.task-reward span{font-size:10px;letter-spacing:1.5px;color:#c0ad82;font-weight:800}
+.task-progress{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:#a9a9a9;margin:15px 0}
+.task-progress b{color:#e8d5a5}
+.tasks-feature button{margin-top:4px}
+.tasks-feature button:disabled{background:#3a352b;border-color:#5d523d;color:#c4b58e;box-shadow:none;opacity:1}
+.tasks-section-title{margin:25px 4px 12px}
+.task-coming{display:flex;align-items:center;gap:12px;padding:16px}
+.task-coming-icon{width:36px;height:36px;flex:0 0 36px;border-radius:11px;background:#c49b4915;border:1px solid #6d5935;color:#d9c18b;display:grid;place-items:center;font-size:20px}
+.task-coming-copy{flex:1;min-width:0}
+.task-coming-copy b{font-size:13px;color:#e7dcc2}
+.task-coming-copy p{font-size:10px;line-height:1.5;margin:4px 0 0}
+.coming-pill{font-size:8px;font-weight:800;letter-spacing:1px;color:#c9b17b;border:1px solid #655535;border-radius:20px;padding:5px 7px}
+.tasks-note,.invite-note{text-align:center;color:#777a82;font-size:10px;line-height:1.6;padding:0 15px 8px}
+.invite-hero{text-align:center;padding:25px 21px;background:radial-gradient(ellipse at 50% 0%,#4b3b1d55,transparent 55%),linear-gradient(145deg,#242118,#15171c 75%);border-color:#81683b}
+.invite-art{width:76px;height:76px;margin:0 auto 17px;display:grid;place-items:center;border-radius:24px;border:1px solid #8b7040;background:linear-gradient(145deg,#44351c,#1c1b19);font-size:43px;color:#f0d694;box-shadow:0 8px 25px #0005}
+.invite-eyebrow{font-size:9px;letter-spacing:1.8px;color:#c8ae74;font-weight:800}
+.invite-hero h3{font-size:23px;color:#f1e2c2;margin:12px 0 8px}
+.invite-hero>p{font-size:12px;line-height:1.7;max-width:290px;margin:0 auto}
+.invite-status{display:inline-flex;align-items:center;gap:8px;margin:19px 0 0;padding:8px 12px;border-radius:30px;border:1px solid #665638;background:#b18b3c12;color:#cbb785;font-size:9px;font-weight:800;letter-spacing:1px}
+.invite-status-dot{width:7px;height:7px;border-radius:50%;background:#c6a65e}
+.invite-disabled{background:#38342b;border-color:#5c513a;color:#c3b58f;box-shadow:none}
+.invite-steps{padding:7px 17px}
+.invite-step{display:flex;gap:13px;align-items:flex-start;padding:15px 0;border-bottom:1px solid #ffffff10}
+.invite-step:last-child{border-bottom:0}
+.invite-step>span{font-size:12px;font-weight:900;letter-spacing:1px;color:#d7bb78;padding-top:2px}
+.invite-step b{font-size:12px;color:#eee0c2}
+.invite-step p{font-size:10px;line-height:1.55;margin:4px 0 0}
+
 </style>
 </head>
 <body>
@@ -165,25 +203,40 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 </section>
 
 <section id="tasks" class="page">
- <h2>🎯 Tasks</h2>
- <div class="card">
+ <h2>Rewards & Tasks</h2>
+ <div class="card tasks-feature">
+  <div class="tasks-top"><span class="tasks-icon">✦</span><span class="tasks-tag">DAILY REWARD</span></div>
   <h3>Daily Check-in</h3>
-  <p class="muted">Daily reward: 50 LTE points</p>
-  <button onclick="daily()">Claim Reward</button>
+  <p class="muted">Come back every day and collect your daily points.</p>
+  <div class="task-reward"><strong>+50</strong><span>LTE POINTS</span></div>
+  <div class="task-progress"><span>Daily availability</span><b id="dailyStatus">Available today</b></div>
+  <button class="primary" id="dailyBtn" onclick="daily()">CLAIM 50 LTE</button>
  </div>
- <div class="card">
-  <h3>Coming soon</h3>
-  <p class="muted">More community tasks will be added later.</p>
+ <div class="tasks-section-title">MORE OPPORTUNITIES</div>
+ <div class="card task-coming">
+  <div class="task-coming-icon">◎</div>
+  <div class="task-coming-copy"><b>Community missions</b><p class="muted">New verified tasks will appear here when available.</p></div>
+  <span class="coming-pill">SOON</span>
  </div>
+ <p class="tasks-note">Only the daily check-in is active right now. Other tasks are not yet available.</p>
 </section>
 
 <section id="referral" class="page">
- <h2>👥 Invite Friends</h2>
- <div class="card">
-  <h3>Invite and earn</h3>
-  <p class="muted">Referral system will be connected to Telegram later.</p>
-  <button onclick="alert('Referral link will be enabled after Telegram integration.')">My Referral Link</button>
+ <h2>Invite Friends</h2>
+ <div class="card invite-hero">
+  <div class="invite-art">♧</div>
+  <div class="invite-eyebrow">GROW THE LTE COMMUNITY</div>
+  <h3>Mining is better together.</h3>
+  <p class="muted">Invite friends to join LTE Mining. The referral program will become available after Telegram integration is completed.</p>
+  <div class="invite-status"><span class="invite-status-dot"></span> REFERRALS NOT ACTIVE YET</div>
+  <button class="primary invite-disabled" disabled>INVITE LINK — COMING SOON</button>
  </div>
+ <div class="card invite-steps">
+  <div class="invite-step"><span>01</span><div><b>Your personal link</b><p class="muted">A unique Telegram invite link will be generated for your account.</p></div></div>
+  <div class="invite-step"><span>02</span><div><b>Friends join</b><p class="muted">Friends will be able to open the mini app through your link.</p></div></div>
+  <div class="invite-step"><span>03</span><div><b>Referral rewards</b><p class="muted">Reward rules will be shown here once the referral system is implemented.</p></div></div>
+ </div>
+ <p class="invite-note">No referral rewards are being issued at this time.</p>
 </section>
 
 <section id="wallet" class="page">
@@ -263,6 +316,7 @@ function daily(){
  earned+=50;
  localStorage.setItem('lteClaimDay',JSON.stringify(today));
  save();
+ render();
  alert('50 LTE points added!');
 }
 function render(){
@@ -270,6 +324,11 @@ function render(){
  document.getElementById('earned').textContent=earned.toFixed(2)+' LTE';
  document.getElementById('walletBalance').textContent=balance.toFixed(2);
  document.getElementById('walletEarned').textContent=earned.toFixed(2)+' LTE';
+ const claimed=get('lteClaimDay','')===new Date().toDateString();
+ const dailyBtn=document.getElementById('dailyBtn');
+ const dailyStatus=document.getElementById('dailyStatus');
+ if(dailyBtn){dailyBtn.disabled=claimed;dailyBtn.textContent=claimed?'DAILY REWARD CLAIMED':'CLAIM 50 LTE';}
+ if(dailyStatus){dailyStatus.textContent=claimed?'Claimed today':'Available today';}
  const active=end>Date.now();
  document.getElementById('status').textContent=active?'Mining':'Inactive';
  document.getElementById('mineBtn').disabled=active;

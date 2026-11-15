@@ -323,6 +323,110 @@ nav button.active{color:#ffe7a6;background:linear-gradient(180deg,#d5a84b20,tran
 .conversion-card{border-radius:10px;border-color:#96723a}
 .conversion-rate{font-family:'Barlow Condensed',sans-serif;font-size:25px;color:#ffe5a2}
 @media(max-width:390px){.home-welcome h2{font-size:29px}.amount{font-size:47px}.mining-time{font-size:32px}.brand-mark{width:43px;height:43px}}
+
+/* LTE MINING — PRODUCT UI POLISH / RELEASE PASS */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{
+ --bg:#080a0d;--surface:#111419;--surface-2:#171a20;--stroke:rgba(220,184,111,.18);
+ --gold:#d9b56c;--gold-hi:#f6e2b1;--gold-dim:#a98548;--text:#f4f0e7;--muted:#969ba4;
+ --radius:18px;
+}
+html{background:var(--bg);scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif!important;background:radial-gradient(ellipse at 50% -20%,#5b431d30,transparent 48%),linear-gradient(180deg,#0b0e12,#080a0d 58%)!important;color:var(--text);-webkit-font-smoothing:antialiased}
+header{position:sticky;top:0;z-index:20;min-height:72px;padding:12px max(18px,calc((100vw - 520px)/2 + 18px));background:rgba(9,11,14,.88)!important;border-bottom:1px solid #d9b56c22!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.logo{gap:12px!important;font-family:'Manrope',sans-serif!important;font-size:16px!important;letter-spacing:1.4px!important;font-weight:800!important}
+.brand-mark{width:44px!important;height:44px!important;border-radius:50%!important;border:1px solid #e2c27d!important;box-shadow:0 0 0 4px #d9b56c12,0 5px 18px #0008!important}
+.brand-wordmark small{font-family:'DM Sans',sans-serif!important;font-size:8px!important;letter-spacing:2.8px!important;color:#b9a47c!important}
+.pill{padding:7px 10px!important;border-radius:6px!important;background:#17150f!important;border:1px solid #806638!important;color:#e7cf9a!important;font-size:9px!important;letter-spacing:1.3px!important}
+main{max-width:520px!important;padding:23px 17px 120px!important}
+.home-welcome{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 2px 21px}
+.eyebrow{font-family:'DM Sans',sans-serif!important;font-size:9px!important;font-weight:800!important;letter-spacing:2px!important;color:#b99b62!important}
+.home-welcome h2{font-family:'Manrope',sans-serif!important;font-size:clamp(23px,6vw,29px)!important;line-height:1.16!important;letter-spacing:-1.1px!important;text-transform:none!important;margin:8px 0 7px!important;color:#f4f0e7!important}
+.home-welcome p{font-size:12px!important;line-height:1.6!important;margin:0!important;max-width:280px}
+.preview-tag{flex:none;padding:6px 8px!important;border:1px solid #8c7040!important;border-radius:5px!important;background:#c9a45a12!important;color:#e8d5aa!important;font-size:8px!important;letter-spacing:1.2px!important}
+.card{border-radius:var(--radius)!important;border:1px solid var(--stroke)!important;background:linear-gradient(145deg,rgba(25,28,33,.98),rgba(15,18,22,.99))!important;box-shadow:0 10px 30px #0005,inset 0 1px #ffffff08!important;padding:19px!important;margin:12px 0!important}
+.balance{padding:23px!important;background:radial-gradient(circle at 94% 8%,#d9b56c20,transparent 33%),linear-gradient(130deg,#282319,#17191d 62%,#111419)!important;border:1px solid #a985484f!important;min-height:180px}
+.balance .muted:first-child{font-family:'DM Sans',sans-serif!important;font-size:10px!important;font-weight:800!important;letter-spacing:1.8px!important;color:#c6b48e!important}
+.balance .coin{width:46px;height:46px;display:block!important;margin:15px 0 8px!important;font-size:0!important;border-radius:50%!important;background:#21190d url('assets/lte-mining-logo.svg') center/cover no-repeat!important;border:1px solid #d6b56c!important;box-shadow:0 5px 18px #0009,0 0 18px #d9b56c30!important}
+.amount{font-family:'Manrope',sans-serif!important;font-size:clamp(39px,10vw,47px)!important;line-height:1.05!important;font-weight:800!important;letter-spacing:-1.8px!important;color:#f8e8c2!important;text-shadow:0 4px 20px #d9b56c1c!important;font-variant-numeric:tabular-nums}
+.balance .muted:last-child{font-size:9px!important;letter-spacing:2px!important;color:#a9a49a!important;margin-top:7px}
+.conversion-card{padding:17px!important;background:linear-gradient(135deg,#181a1e,#101216)!important;border-color:#a9854838!important}
+.conversion-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;font-family:'DM Sans',sans-serif!important;font-size:9px!important;font-weight:800!important;letter-spacing:1.2px!important;color:#b9a477!important}
+.conversion-heading span:last-child{font-size:8px!important;text-align:right;color:#8e9298!important}
+.conversion-rate{font-family:'Manrope',sans-serif!important;font-size:21px!important;font-weight:800!important;letter-spacing:-.6px!important;color:#f3dfb0!important;margin:14px 0 11px}
+.conversion-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-top:1px solid #ffffff0c;font-size:11px!important;color:#aeb2ba!important}
+.conversion-row b{font-size:12px!important;color:#eee2c8!important;font-variant-numeric:tabular-nums}
+.conversion-note{font-size:9px!important;line-height:1.6!important;color:#777e87!important;margin:9px 0 0!important}
+.home-section-label{display:flex;align-items:center;gap:10px;margin:25px 3px 10px!important;font-family:'DM Sans',sans-serif!important;font-size:9px!important;font-weight:800!important;letter-spacing:1.8px!important;color:#b99b62!important}
+.home-section-label:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,#b99b624d,transparent)}
+.home-overview-card{padding:17px!important}
+.stat{font-size:12px!important;color:#9da2ab!important;padding:12px 0!important}
+.stat b{font-family:'Manrope',sans-serif!important;font-size:12px!important;font-weight:700!important;color:#e8dfcc!important}
+button{font-family:'DM Sans',sans-serif!important;font-weight:800!important;letter-spacing:.6px!important;border-radius:10px!important;background:linear-gradient(135deg,#f0d79f,#c49b54 60%,#a77a34)!important;border:1px solid #f1d9a4!important;color:#1a160e!important;box-shadow:0 5px 15px #0005,inset 0 1px #fff9!important}
+button:active{transform:translateY(1px) scale(.99)!important;filter:brightness(1.08)}
+.primary{min-height:48px!important;padding:14px 18px!important;font-size:12px!important;letter-spacing:1.1px!important;border-radius:10px!important}
+.home-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.home-metric{min-width:0;padding:16px!important;border-radius:14px!important}
+.home-metric .muted{font-size:8px!important;font-weight:800!important;letter-spacing:1.2px!important}
+.home-metric strong{display:block;margin-top:10px;font-family:'Manrope',sans-serif!important;font-size:20px!important;letter-spacing:-.5px!important;color:#f1dfb8!important;overflow-wrap:anywhere}
+.home-metric small{display:block;margin-top:5px;font-size:9px!important;color:#7f858e!important}
+#home>h2,.page>h2{font-family:'Manrope',sans-serif!important;font-size:23px!important;font-weight:800!important;letter-spacing:-.8px!important;color:#f2ead9!important;margin:6px 2px 14px!important}
+.mining-hero{padding:22px 17px!important;background:radial-gradient(ellipse at 50% 5%,#74532335,transparent 48%),linear-gradient(155deg,#1c1b17,#111419 72%)!important;border-color:#a985484d!important}
+.mining-kicker{font-family:'DM Sans',sans-serif!important;font-size:9px!important;letter-spacing:1.8px!important;color:#cbb47f!important;margin:1px 0 20px!important}
+.mining-ring{width:min(68vw,246px)!important;padding:7px!important;margin-bottom:18px!important;box-shadow:0 0 0 1px #e4c37a33,0 0 28px #d0a64b2b,0 12px 26px #0009!important}
+.mining-ring-inner{border:1px solid #a98548!important;background:radial-gradient(circle at 50% 25%,#2a251b,#101318 74%)!important}
+.mining-gem{width:48px!important;height:48px!important;border-radius:50%!important;margin-bottom:10px!important}
+.mining-time{font-family:'Manrope',sans-serif!important;font-size:clamp(27px,7vw,34px)!important;font-weight:800!important;letter-spacing:1px!important;color:#f5e5c0!important}
+.mining-caption{font-family:'DM Sans',sans-serif!important;font-size:8px!important;letter-spacing:1.7px!important;color:#92959b!important}
+.mining-state{border-radius:6px!important;padding:8px 12px!important;font-family:'DM Sans',sans-serif!important;font-size:9px!important;letter-spacing:1.2px!important;background:#c9a45a12!important;border-color:#8b6b38!important}
+.mining-description{font-size:10px!important;line-height:1.7!important;color:#9399a2!important;max-width:270px!important}
+.mining-details{padding:7px 17px!important}
+.mining-detail{font-size:11px!important;padding:13px 0!important;color:#9da2ab!important}
+.mining-detail b{font-family:'Manrope',sans-serif!important;font-size:12px!important;color:#eee0c2!important}
+.mining-detail small{font-size:9px!important;color:#c8aa6a!important}
+.tasks-feature,.wallet-hero,.invite-hero,.profile-hero{border-radius:17px!important;background:radial-gradient(ellipse at 100% 0%,#d0a64b20,transparent 45%),linear-gradient(145deg,#242117,#15171b 72%)!important;border-color:#9a793f55!important}
+.tasks-feature{padding:21px!important}
+.tasks-feature h3,.invite-hero h3{font-family:'Manrope',sans-serif!important;font-size:23px!important;font-weight:800!important;letter-spacing:-.7px!important;color:#f2e6cf!important}
+.task-reward strong{font-family:'Manrope',sans-serif!important;font-size:44px!important;color:#f4dfad!important}
+.tasks-tag,.tasks-section-title{font-family:'DM Sans',sans-serif!important;font-size:9px!important;letter-spacing:1.5px!important}
+.task-coming{display:flex;align-items:center;gap:12px}
+.task-coming-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:#c9a45a16;border:1px solid #9b793e55;color:#e7cd94}
+.task-coming-copy{flex:1;min-width:0}
+.task-coming-copy b{font-size:12px;color:#e9dfcb}
+.task-coming-copy p{font-size:10px!important;line-height:1.5}
+.coming-pill,.profile-soon{padding:5px 7px!important;border:1px solid #77613b!important;border-radius:5px!important;background:#c9a45a12!important;color:#d8bd83!important;font-size:8px!important;letter-spacing:1px!important}
+.account-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:5px!important;border-radius:12px!important;background:#0e1115!important;border:1px solid #ffffff12!important}
+.account-tab{padding:11px 4px!important;border-radius:8px!important;background:transparent!important;border:1px solid transparent!important;box-shadow:none!important;color:#8e949d!important;font-size:10px!important;letter-spacing:.2px!important}
+.account-tab.active{background:linear-gradient(145deg,#42331b,#211b12)!important;border-color:#9c793e!important;color:#f2dfb5!important;box-shadow:inset 0 1px #fff2!important}
+.profile-avatar{width:68px!important;height:68px!important;border-radius:50%!important;border:2px solid #d5b36c!important;background:#121316 url('assets/lte-mining-logo.svg') center/cover no-repeat!important;box-shadow:0 0 0 5px #d5b36c12,0 8px 20px #0008!important}
+.profile-name{font-family:'Manrope',sans-serif!important;font-size:20px!important;font-weight:800!important;color:#f2e7d1!important}
+.profile-username{font-size:11px!important;color:#969ba4!important}
+.profile-row{padding:13px 0!important;border-bottom:1px solid #ffffff0c!important;font-size:11px!important;color:#9ba0a8!important}
+.profile-row:last-child{border:0}
+.profile-row b{color:#e8dfce!important;font-weight:600!important}
+.profile-menu-item{padding:14px 0!important;border-bottom:1px solid #ffffff0c!important}
+.profile-menu-item:last-child{border:0}
+.profile-menu-item b{font-size:12px!important;color:#e8dfce!important}
+.profile-menu-item p{font-size:10px!important;line-height:1.5!important}
+.wallet-hero{padding:20px!important}
+.wallet-balance-line .amount{font-size:clamp(38px,10vw,48px)!important}
+.wallet-stat-card{padding:15px!important;border-radius:13px!important}
+.wallet-stat-card .muted{font-size:8px!important;letter-spacing:1.1px!important}
+.wallet-stat-card b{font-family:'Manrope',sans-serif!important;font-size:18px!important;color:#f0dfbb!important}
+.wallet-security,.wallet-withdraw{border-radius:13px!important}
+.ton-connect-card{border-color:#a9854833!important}
+.ton-connect-heading{font-family:'DM Sans',sans-serif!important;font-size:10px!important;letter-spacing:1.2px!important;color:#e6d4ad!important}
+input{font-family:'DM Sans',sans-serif!important;border-radius:9px!important;background:#0c0f13!important;border:1px solid #383b40!important}
+nav{z-index:30!important;display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:8px!important;padding:9px max(16px,calc((100vw - 520px)/2 + 16px)) max(12px,env(safe-area-inset-bottom))!important;background:rgba(10,12,15,.94)!important;border-top:1px solid #d9b56c2b!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 -8px 28px #0008!important}
+nav button{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:5px!important;min-height:49px!important;padding:7px 4px!important;border:1px solid transparent!important;border-radius:10px!important;background:transparent!important;color:#858b94!important;font-family:'DM Sans',sans-serif!important;font-size:9px!important;font-weight:700!important;letter-spacing:.5px!important;line-height:1!important;box-shadow:none!important}
+nav button.active{background:#d5ad5b12!important;border-color:#b28c4a40!important;color:#f1dba8!important;box-shadow:inset 0 1px #d5ad5b33!important}
+nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.profile-disclaimer,.wallet-disclaimer,.tasks-note,.invite-note{font-size:9px!important;line-height:1.7!important;color:#777e87!important}
+@media(min-width:600px){main{padding-top:30px!important}.home-welcome{margin-bottom:24px}.balance{padding:27px!important}}
+@media(max-width:360px){main{padding-left:13px!important;padding-right:13px!important}.home-welcome h2{font-size:22px!important}.card{padding:16px!important}.balance{padding:19px!important}.conversion-row{font-size:10px!important}.conversion-row b{font-size:11px!important}.home-metric strong{font-size:17px!important}}
+@media(prefers-reduced-motion:no-preference){.card{transition:border-color .2s ease,transform .2s ease}.card:active{border-color:#b58c4a66}.brand-mark{animation:softGoldGlow 5s ease-in-out infinite}}
+@keyframes softGoldGlow{0%,100%{box-shadow:0 0 0 4px #d9b56c12,0 5px 18px #0008}50%{box-shadow:0 0 0 5px #d9b56c18,0 5px 22px #d9b56c22}}
+
 </style>
 </head>
 <body>
@@ -411,9 +515,9 @@ nav button.active{color:#ffe7a6;background:linear-gradient(180deg,#d5a84b20,tran
 <section id="account" class="page">
  <h2>My Account</h2>
  <div class="account-tabs" role="tablist" aria-label="Account sections">
-  <button class="account-tab active" type="button" onclick="showAccountPanel('profile',this)">👤 Profile</button>
-  <button class="account-tab" type="button" onclick="showAccountPanel('wallet',this)">💳 Wallet</button>
-  <button class="account-tab" type="button" onclick="showAccountPanel('referral',this)">👥 Referrals</button>
+  <button class="account-tab active" type="button" onclick="showAccountPanel('profile',this)">PROFILE</button>
+  <button class="account-tab" type="button" onclick="showAccountPanel('wallet',this)">WALLET</button>
+  <button class="account-tab" type="button" onclick="showAccountPanel('referral',this)">REFERRALS</button>
  </div>
  <div id="account-profile" class="account-panel active"><h2>My Profile</h2>
  <div class="card profile-hero">
@@ -486,10 +590,10 @@ nav button.active{color:#ffe7a6;background:linear-gradient(180deg,#d5a84b20,tran
 </section>
 </main>
 
-<nav>
- <button class="active" onclick="showPage('home',this)">🏠<br>Home</button>
- <button onclick="showPage('tasks',this)">🎯<br>Tasks</button>
- <button onclick="showPage('account',this)">👤<br>Account</button>
+<nav aria-label="Main navigation">
+ <button class="active" aria-label="Home" onclick="showPage('home',this)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>HOME</span></button>
+ <button aria-label="Tasks" onclick="showPage('tasks',this)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><path d="m3 6 1 1 2-2M3 12l1 1 2-2M3 18l1 1 2-2"/></svg><span>TASKS</span></button>
+ <button aria-label="Account" onclick="showPage('account',this)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>ACCOUNT</span></button>
 </nav>
 
 <script id="tonconnect-sdk-script" src="https://unpkg.com/@tonconnect/ui@5.0.3/dist/tonconnect-ui.min.js"></script>

@@ -470,7 +470,30 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
   <div class="coin">◈</div>
   <div class="amount" id="balance">0.00</div>
   <div class="muted">LTE POINTS</div>
+ </div
+
+ <div class="home-section-label">MINING CENTER</div>
+ <h2>Mining Center</h2>
+ <div class="card mining-hero">
+  <div class="mining-kicker">LTE NETWORK • LIVE SESSION</div>
+  <div class="mining-ring" id="miningRing" style="--progress:0%">
+   <div class="mining-ring-inner">
+    <img class="mining-gem" src="assets/lte-mining-logo.svg" alt="LTE Mining emblem">
+    <div class="mining-time" id="timer">00:00:00</div>
+    <div class="mining-caption">TIME REMAINING</div>
+   </div>
+  </div>
+  <div class="mining-state"><span class="live-dot"></span> MINING SESSION <span class="mining-status-text" id="status">Inactive</span></div>
+  <p class="muted mining-description">Your LTE points accrue continuously while the 8-hour session is active.</p>
+  <button class="primary" id="mineBtn" onclick="startMining()">START / CLAIM MINING</button>
  </div>
+ <div class="card mining-details">
+  <div class="mining-detail"><span>Mining speed</span><b>10 <small>LTE / hour</small></b></div>
+  <div class="mining-detail"><span>Session duration</span><b>8 hours</b></div>
+  <div class="mining-detail"><span>Session reward</span><b>80 <small>LTE</small></b></div>
+ </div>
+
+>
  <div class="card conversion-card">
   <div class="conversion-heading"><span>LTE VALUE ESTIMATE</span><span id="homeGramPrice">LOADING GRAM PRICE…</span></div>
   <div class="conversion-rate">100 LTE ≈ 0.6 GRAM</div>
@@ -506,28 +529,8 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
   <div class="chart-foot"><span><i class="chart-legend"></i> Accrued LTE points</span><span id="chartProgressLabel">Waiting for session</span></div>
  </div>
 
- <div class="home-section-label">MINING CENTER</div>
- <h2>Mining Center</h2>
- <div class="card mining-hero">
-  <div class="mining-kicker">LTE NETWORK • LIVE SESSION</div>
-  <div class="mining-ring" id="miningRing" style="--progress:0%">
-   <div class="mining-ring-inner">
-    <img class="mining-gem" src="assets/lte-mining-logo.svg" alt="LTE Mining emblem">
-    <div class="mining-time" id="timer">00:00:00</div>
-    <div class="mining-caption">TIME REMAINING</div>
-   </div>
-  </div>
-  <div class="mining-state"><span class="live-dot"></span> MINING SESSION <span class="mining-status-text" id="status">Inactive</span></div>
-  <p class="muted mining-description">Your LTE points accrue continuously while the 8-hour session is active.</p>
-  <button class="primary" id="mineBtn" onclick="startMining()">START / CLAIM MINING</button>
- </div>
- <div class="card mining-details">
-  <div class="mining-detail"><span>Mining speed</span><b>10 <small>LTE / hour</small></b></div>
-  <div class="mining-detail"><span>Session duration</span><b>8 hours</b></div>
-  <div class="mining-detail"><span>Session reward</span><b>80 <small>LTE</small></b></div>
- </div>
-</section>
 
+</section>
 
 
 <section id="tasks" class="page">

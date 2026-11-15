@@ -508,12 +508,26 @@ async function checkLteBackend(){
   });
   if(!response.ok)throw new Error('HTTP '+response.status);
   const data=await response.json();
-  if(data&&data.success){
-   el.textContent='Backend connected · Secure account sync setup pending';
-   el.style.color='#e7bd68';
+  if(!data||!data.success)throw new Error('Unexpected API response');
+
+  const initData=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp.initData:'';
+  if(initData){
+   const syncResponse=await fetch(SUPABASE_URL+'/functions/v1/lte-mining-api',{
+    method:'POST',
+    headers:{
+     'Content-Type':'application/json',
+     'apikey':SUPABASE_PUBLISHABLE_KEY,
+     'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY
+    },
+    body:JSON.stringify({action:'sync-profile',initData})
+   });
+   const syncData=await syncResponse.json();
+   if(!syncResponse.ok||!syncData.success)throw new Error(syncData.error||'Account sync failed');
+   el.textContent='Backend connected · Telegram account verified';
   }else{
-   throw new Error('Unexpected API response');
+   el.textContent='Backend connected · Open inside Telegram to sync your account';
   }
+  el.style.color='#e7bd68';
  }catch(error){
   el.textContent='Backend connection unavailable · Please check Edge Function deployment';
   el.style.color='#d9a36b';

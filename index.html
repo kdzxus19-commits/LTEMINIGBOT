@@ -398,6 +398,8 @@ let end=get('lteEnd',0);
 let last=get('lteLast',0);
 const MINING_DURATION=8*60*60*1000;
 const MINING_RATE=10;
+// Shorten any previously active 24-hour demo session to the new 8-hour limit.
+if(last>0&&end>last+MINING_DURATION)end=last+MINING_DURATION;
 let claimed=get('lteDaily',false);
 
 function save(){

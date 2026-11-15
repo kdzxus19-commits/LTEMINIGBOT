@@ -474,6 +474,33 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
 .balance-secure{color:#c7ad76;white-space:nowrap}
 @media(max-width:360px){.balance-premium{padding:19px 16px 16px!important}.balance-status{font-size:7px;padding:5px 7px}.balance-premium .amount{font-size:37px!important}.balance-premium .coin{width:37px!important;height:37px!important;flex-basis:37px}}
 
+
+/* 7-DAY DAILY CHECK-IN JOURNEY */
+.checkin-card{padding:21px 18px;background:radial-gradient(ellipse at 100% 0%,#b58b3c20,transparent 48%),linear-gradient(145deg,#242219,#15171c 75%);border-color:#80683d}
+.checkin-streak{display:flex;align-items:center;gap:11px;margin:20px 0 16px;padding:12px 13px;border:1px solid #78613a;border-radius:14px;background:#d5a84b12}
+.checkin-flame{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:#d5a84b20;color:#f2d899;font-size:19px}
+.checkin-streak>span:nth-child(2){display:flex;flex:1;flex-direction:column;gap:3px}
+.checkin-streak b{font-size:11px;letter-spacing:1px;color:#f1dda9}
+.checkin-streak small{font-size:10px;color:#99958b}
+.checkin-total{font-size:9px;font-weight:900;letter-spacing:1px;color:#c9ad70}
+.checkin-days{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.checkin-day{position:relative;min-width:0;min-height:91px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid #34363b;border-radius:13px;background:linear-gradient(160deg,#1b1e23,#121419);color:#777b83}
+.checkin-day-num{font-size:8px;font-weight:850;letter-spacing:1px}
+.checkin-day>b{font-size:18px;color:#8e9299}
+.checkin-day>small{font-size:8px;letter-spacing:1px;color:#777b83}
+.checkin-day>i{display:none;position:absolute;top:5px;right:7px;font-size:10px;font-style:normal;color:#17140d;background:#e8ca83;width:16px;height:16px;border-radius:50%;line-height:16px;text-align:center;font-weight:900}
+.checkin-day.completed{border-color:#8c713e;background:linear-gradient(145deg,#3a301e,#211f19);color:#d9c18b}
+.checkin-day.completed>b{color:#f3d995}.checkin-day.completed>small{color:#bda36a}.checkin-day.completed>i{display:block}
+.checkin-day.current{border-color:#f0d18b;background:linear-gradient(145deg,#4b3b20,#282219);box-shadow:0 0 0 1px #d7b66b35,0 0 18px #d5a84b20;color:#f3dda8}
+.checkin-day.current>b{color:#ffe8ae}.checkin-day.current>small{color:#d9c18b}
+.checkin-day.locked{opacity:.55}
+.checkin-progress-track{height:5px;border-radius:10px;background:#34332e;overflow:hidden;margin:16px 1px 13px}
+.checkin-progress-track span{display:block;width:0;height:100%;border-radius:10px;background:linear-gradient(90deg,#a77c36,#f4d991);transition:width .3s ease}
+.checkin-card .task-progress{margin:0 0 5px;font-size:10px}
+.checkin-card .task-progress b{color:#d9c18b}
+.checkin-card button:disabled{background:#373329;border-color:#665638;color:#d4c49e;opacity:1;box-shadow:none}
+@media(max-width:350px){.checkin-days{gap:6px}.checkin-day{min-height:82px}.checkin-day>b{font-size:16px}}
+
 </style>
 </head>
 <body>
@@ -562,13 +589,23 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
 
 <section id="tasks" class="page">
  <h2>Rewards & Tasks</h2>
- <div class="card tasks-feature">
-  <div class="tasks-top"><span class="tasks-icon">✦</span><span class="tasks-tag">DAILY REWARD</span></div>
+ <div class="card tasks-feature checkin-card">
+  <div class="tasks-top"><span class="tasks-icon">✦</span><span class="tasks-tag">7-DAY REWARD JOURNEY</span></div>
   <h3>Daily Check-in</h3>
-  <p class="muted">Come back every day and collect your daily points.</p>
-  <div class="task-reward"><strong>+50</strong><span>LTE POINTS</span></div>
-  <div class="task-progress"><span>Daily availability</span><b id="dailyStatus">Available today</b></div>
-  <button class="primary" id="dailyBtn" onclick="daily()">CLAIM 50 LTE</button>
+  <p class="muted">Check in once a day to complete your 7-day reward journey.</p>
+  <div class="checkin-streak"><span class="checkin-flame">✦</span><span><b id="checkinStreak">DAY 1</b><small id="checkinHint">Your journey starts today</small></span><span class="checkin-total">7 DAYS</span></div>
+  <div class="checkin-days" id="checkinDays">
+   <div class="checkin-day" id="checkinDay1"><span class="checkin-day-num">DAY 1</span><b>+50</b><small>LTE</small><i>✓</i></div>
+   <div class="checkin-day" id="checkinDay2"><span class="checkin-day-num">DAY 2</span><b>+50</b><small>LTE</small><i>✓</i></div>
+   <div class="checkin-day" id="checkinDay3"><span class="checkin-day-num">DAY 3</span><b>+50</b><small>LTE</small><i>✓</i></div>
+   <div class="checkin-day" id="checkinDay4"><span class="checkin-day-num">DAY 4</span><b>+50</b><small>LTE</small><i>✓</i></div>
+   <div class="checkin-day" id="checkinDay5"><span class="checkin-day-num">DAY 5</span><b>+50</b><small>LTE</small><i>✓</i></div>
+   <div class="checkin-day" id="checkinDay6"><span class="checkin-day-num">DAY 6</span><b>+50</b><small>LTE</small><i>✓</i></div>
+   <div class="checkin-day" id="checkinDay7"><span class="checkin-day-num">DAY 7</span><b>+50</b><small>LTE</small><i>✓</i></div>
+  </div>
+  <div class="checkin-progress-track"><span id="checkinProgress"></span></div>
+  <div class="task-progress"><span id="dailyStatus">Day 1 is ready</span><b id="checkinProgressLabel">0 / 7 completed</b></div>
+  <button class="primary" id="dailyBtn" onclick="daily()">CLAIM DAY 1 · 50 LTE</button>
  </div>
  <div class="tasks-section-title">MORE OPPORTUNITIES</div>
  <div class="card task-coming">
@@ -708,13 +745,18 @@ function startMining(){
 }
 function daily(){
  const today=new Date().toDateString();
- if(get('lteClaimDay','')===today){alert('Already claimed today!');return;}
+ if(get('lteClaimDay','')===today){alert('Already checked in today!');return;}
+ const yesterday=new Date(Date.now()-86400000).toDateString();
+ const previousDay=get('lteClaimDay','');
+ const previousStreak=Number(get('lteCheckinStreak',0))||0;
+ const nextStreak=previousDay===yesterday?(previousStreak>=7?1:previousStreak+1):1;
  balance+=50;
  earned+=50;
  localStorage.setItem('lteClaimDay',JSON.stringify(today));
+ localStorage.setItem('lteCheckinStreak',JSON.stringify(nextStreak));
  save();
  render();
- alert('50 LTE points added!');
+ alert('Daily check-in complete! +50 LTE');
 }
 function setupProfile(){
  const user=window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initDataUnsafe?window.Telegram.WebApp.initDataUnsafe.user:null;
@@ -804,11 +846,32 @@ function render(){
   if(profileBalanceEl)profileBalanceEl.textContent=liveBalance.toFixed(4)+' LTE';
   if(profileEarnedEl)profileEarnedEl.textContent=liveEarned.toFixed(4)+' LTE';
  updateConversionDisplays(liveBalance);
- const claimed=get('lteClaimDay','')===new Date().toDateString();
+ const today=new Date().toDateString();
+ const yesterday=new Date(Date.now()-86400000).toDateString();
+ const lastCheckin=get('lteClaimDay','');
+ const claimed=lastCheckin===today;
+ const savedStreak=Number(get('lteCheckinStreak',0))||0;
+ const journeyDay=claimed?Math.max(1,savedStreak):lastCheckin===yesterday?(savedStreak>=7?1:savedStreak+1):1;
+ const completedDays=claimed?journeyDay:journeyDay-1;
+ for(let day=1;day<=7;day++){
+  const tile=document.getElementById('checkinDay'+day);
+  if(!tile)continue;
+  tile.classList.toggle('completed',day<=completedDays);
+  tile.classList.toggle('current',!claimed&&day===journeyDay);
+  tile.classList.toggle('locked',day>journeyDay);
+ }
+ const streakEl=document.getElementById('checkinStreak');
+ const hintEl=document.getElementById('checkinHint');
+ const progressEl=document.getElementById('checkinProgress');
+ const progressLabel=document.getElementById('checkinProgressLabel');
  const dailyBtn=document.getElementById('dailyBtn');
  const dailyStatus=document.getElementById('dailyStatus');
- if(dailyBtn){dailyBtn.disabled=claimed;dailyBtn.textContent=claimed?'DAILY REWARD CLAIMED':'CLAIM 50 LTE';}
- if(dailyStatus){dailyStatus.textContent=claimed?'Claimed today':'Available today';}
+ if(streakEl)streakEl.textContent=claimed?'DAY '+journeyDay+' COMPLETED':'DAY '+journeyDay;
+ if(hintEl)hintEl.textContent=claimed?'Come back tomorrow for the next day':'Your next reward is ready to collect';
+ if(progressEl)progressEl.style.width=(completedDays/7*100)+'%';
+ if(progressLabel)progressLabel.textContent=completedDays+' / 7 completed';
+ if(dailyBtn){dailyBtn.disabled=claimed;dailyBtn.textContent=claimed?'CHECKED IN · +50 LTE':'CLAIM DAY '+journeyDay+' · 50 LTE';}
+ if(dailyStatus)dailyStatus.textContent=claimed?'Reward collected today':'Day '+journeyDay+' is ready';
  const active=end>Date.now();
  document.getElementById('status').textContent=active?'Mining · Live':'Completed · Ready';
  const profileMiningStatus=document.getElementById('profileMiningStatus');

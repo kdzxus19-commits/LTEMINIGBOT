@@ -69,6 +69,25 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 #wallet .amount{margin:12px 0}
 @media(min-width:420px){main{padding-left:20px;padding-right:20px}.balance{padding:27px}}
 
+
+/* PREMIUM GOLD MINING CENTER */
+.mining-hero{text-align:center;padding:25px 20px 23px;background:radial-gradient(ellipse at 50% 25%,#292315 0%,#191a1e 48%,#121419 100%);border-color:#766039}
+.mining-kicker{font-size:10px;font-weight:800;letter-spacing:2.2px;color:#c8ad70;margin:2px 0 23px}
+.mining-ring{--progress:0%;width:min(72vw,270px);aspect-ratio:1;margin:0 auto 21px;border-radius:50%;padding:9px;background:conic-gradient(from -90deg,#f3d58f 0%,#b68a3f var(--progress),#39342a var(--progress),#24252a 100%);box-shadow:0 0 0 1px #d2ad6440,0 0 35px #c49b4930,inset 0 0 18px #0008;position:relative}
+.mining-ring:before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from -90deg,#fff0 0deg,#f5dfaa55 35deg,#fff0 75deg);pointer-events:none}
+.mining-ring-inner{height:100%;width:100%;border-radius:50%;background:radial-gradient(circle at 50% 35%,#29251c,#111318 72%);border:1px solid #80663b;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 8px 25px #0009}
+.mining-gem{font-size:35px;color:#f1d38d;text-shadow:0 0 20px #d5ad5b88;margin-bottom:9px}
+.mining-time{font-size:clamp(25px,7vw,34px);font-weight:800;letter-spacing:1.5px;color:#f5dfaa;font-variant-numeric:tabular-nums}
+.mining-caption{font-size:9px;letter-spacing:2px;font-weight:800;color:#a8a096;margin-top:8px}
+.mining-state{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border:1px solid #6e5a34;border-radius:30px;background:#c49b4914;color:#e8d3a2;font-size:10px;font-weight:800;letter-spacing:1.4px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#e8c77d;box-shadow:0 0 10px #e8c77d}
+.mining-description{max-width:280px;margin:15px auto 4px;line-height:1.6}
+.mining-details{padding:8px 20px}
+.mining-detail{display:flex;align-items:center;justify-content:space-between;padding:15px 0;border-bottom:1px solid #ffffff10;color:#aeb0b6;font-size:13px}
+.mining-detail:last-child{border-bottom:0}
+.mining-detail b{color:#f1dfb9;font-size:14px}
+.mining-detail small{font-size:11px;color:#c7b17e;font-weight:600}
+
 </style>
 </head>
 <body>
@@ -99,12 +118,24 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 </section>
 
 <section id="mining" class="page">
- <h2>⚡ Mining Center</h2>
- <div class="card">
-  <div class="coin">◈</div>
-  <h2 id="timer">00:00:00</h2>
-  <p class="muted">Your mining session countdown</p>
+ <h2>Mining Center</h2>
+ <div class="card mining-hero">
+  <div class="mining-kicker">LTE NETWORK • LIVE SESSION</div>
+  <div class="mining-ring" id="miningRing" style="--progress:0%">
+   <div class="mining-ring-inner">
+    <div class="mining-gem">◈</div>
+    <div class="mining-time" id="timer">00:00:00</div>
+    <div class="mining-caption">TIME REMAINING</div>
+   </div>
+  </div>
+  <div class="mining-state"><span class="live-dot"></span> MINING SESSION</div>
+  <p class="muted mining-description">Your LTE mining session is running. Keep this session active until the countdown ends.</p>
   <button class="primary" onclick="startMining()">START / CLAIM MINING</button>
+ </div>
+ <div class="card mining-details">
+  <div class="mining-detail"><span>Mining speed</span><b>10 <small>LTE / hour</small></b></div>
+  <div class="mining-detail"><span>Session duration</span><b>24 hours</b></div>
+  <div class="mining-detail"><span>Session reward</span><b>240 <small>LTE</small></b></div>
  </div>
 </section>
 
@@ -211,14 +242,20 @@ function showPage(id,btn){
  btn.classList.add('active');
 }
 function tick(){
+ const timer=document.getElementById('timer');
+ const ring=document.getElementById('miningRing');
  if(end>Date.now()){
-  const s=Math.floor((end-Date.now())/1000);
-  document.getElementById('timer').textContent=
+  const remaining=end-Date.now();
+  const s=Math.floor(remaining/1000);
+  timer.textContent=
    String(Math.floor(s/3600)).padStart(2,'0')+':'+
    String(Math.floor(s%3600/60)).padStart(2,'0')+':'+
    String(s%60).padStart(2,'0');
+  const progress=Math.max(0,Math.min(100,(1-remaining/86400000)*100));
+  ring.style.setProperty('--progress',progress+'%');
  }else{
-  document.getElementById('timer').textContent='00:00:00';
+  timer.textContent='00:00:00';
+  ring.style.setProperty('--progress','0%');
  }
 }
 render();

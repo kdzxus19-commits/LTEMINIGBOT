@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <title>LTE Mining</title>
+<link rel="icon" type="image/svg+xml" href="assets/lte-mining-logo.svg">
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#090711;color:white;font-family:Arial,sans-serif}
@@ -34,7 +35,9 @@ input{background:#211632;border:1px solid #634083;color:white;padding:12px;borde
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;background:linear-gradient(180deg,#111318 0%,#090a0d 65%);color:#f5f5f6;font-family:Inter,Arial,sans-serif}
 header{padding:20px 20px 18px;display:flex;align-items:center;justify-content:space-between;background:#101216;border-bottom:1px solid #292a2d;position:relative}
-.logo{font-size:21px;font-weight:850;letter-spacing:1.3px;color:var(--gold2)}
+.logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:850;letter-spacing:1.3px;color:var(--gold2)}
+.brand-mark{width:42px;height:42px;object-fit:cover;border-radius:12px;border:1px solid #9d793d;box-shadow:0 0 18px #d5a84b24}
+.brand-wordmark{display:flex;flex-direction:column;gap:2px}.brand-wordmark small{font-size:9px;letter-spacing:3px;color:#bca36e;font-weight:700}
 .pill{padding:8px 13px;border-radius:30px;background:#242019;border:1px solid #6f592e;color:var(--gold2);font-size:12px;font-weight:700;letter-spacing:1px}
 main{max-width:520px;margin:0 auto;padding:20px 17px 112px}
 .page{display:none}.page.active{display:block}
@@ -76,7 +79,7 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 .mining-ring{--progress:0%;width:min(72vw,270px);aspect-ratio:1;margin:0 auto 21px;border-radius:50%;padding:9px;background:conic-gradient(from -90deg,#f3d58f 0%,#b68a3f var(--progress),#39342a var(--progress),#24252a 100%);box-shadow:0 0 0 1px #d2ad6440,0 0 35px #c49b4930,inset 0 0 18px #0008;position:relative}
 .mining-ring:before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from -90deg,#fff0 0deg,#f5dfaa55 35deg,#fff0 75deg);pointer-events:none}
 .mining-ring-inner{height:100%;width:100%;border-radius:50%;background:radial-gradient(circle at 50% 35%,#29251c,#111318 72%);border:1px solid #80663b;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 8px 25px #0009}
-.mining-gem{font-size:35px;color:#f1d38d;text-shadow:0 0 20px #d5ad5b88;margin-bottom:9px}
+.mining-gem{width:54px;height:54px;object-fit:cover;border-radius:16px;border:1px solid #a98543;box-shadow:0 0 20px #d5ad5b55;margin-bottom:9px}
 .mining-time{font-size:clamp(25px,7vw,34px);font-weight:800;letter-spacing:1.5px;color:#f5dfaa;font-variant-numeric:tabular-nums}
 .mining-caption{font-size:9px;letter-spacing:2px;font-weight:800;color:#a8a096;margin-top:8px}
 .mining-state{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border:1px solid #6e5a34;border-radius:30px;background:#c49b4914;color:#e8d3a2;font-size:10px;font-weight:800;letter-spacing:1.4px}
@@ -154,7 +157,7 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 
 /* PREMIUM GOLD PROFILE */
 .profile-hero{text-align:center;padding:27px 20px 23px;background:radial-gradient(ellipse at 50% 0%,#51401f55,transparent 60%),linear-gradient(145deg,#272319,#15171c 75%);border-color:#80663a}
-.profile-avatar{width:76px;height:76px;margin:0 auto 14px;border-radius:25px;display:grid;place-items:center;background:linear-gradient(145deg,#e6c77f,#9a7130);border:2px solid #f1dca5;color:#1b1710;font-size:31px;font-weight:900;box-shadow:0 7px 24px #d1a54b35}
+.profile-avatar{width:76px;height:76px;margin:0 auto 14px;border-radius:22px;display:grid;place-items:center;background:#111 url("assets/lte-mining-logo.svg") center/cover no-repeat;border:2px solid #d8b45d;color:transparent;font-size:0;font-weight:900;box-shadow:0 7px 24px #d1a54b35}
 .profile-name{font-size:21px;font-weight:800;color:#f2e5c7}
 .profile-username{font-size:12px;color:#aaa69b;margin-top:5px}
 .profile-badge{display:inline-flex;align-items:center;gap:7px;margin-top:16px;padding:7px 11px;border-radius:25px;background:#c7a05216;border:1px solid #80663a;color:#d9c28d;font-size:9px;font-weight:800;letter-spacing:1.2px}
@@ -177,7 +180,7 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 </head>
 <body>
 <header>
- <div class="logo">LTE&nbsp; / &nbsp;MINING</div>
+ <div class="logo"><img class="brand-mark" src="assets/lte-mining-logo.svg" alt="LTE Mining Shadow Miner logo"><span class="brand-wordmark">LTE MINING<small>MINE • EARN • GROW</small></span></div>
  <div class="pill">● LIVE</div>
 </header>
 
@@ -208,7 +211,7 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
   <div class="mining-kicker">LTE NETWORK • LIVE SESSION</div>
   <div class="mining-ring" id="miningRing" style="--progress:0%">
    <div class="mining-ring-inner">
-    <div class="mining-gem">◈</div>
+    <img class="mining-gem" src="assets/lte-mining-logo.svg" alt="LTE Mining emblem">
     <div class="mining-time" id="timer">00:00:00</div>
     <div class="mining-caption">TIME REMAINING</div>
    </div>

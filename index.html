@@ -272,6 +272,57 @@ nav button.active{color:#ffe6a5;background:linear-gradient(180deg,#d5a84b24,tran
 @media(prefers-reduced-motion:no-preference){.brand-mark,.mining-gem{animation:goldPulse 4s ease-in-out infinite}}
 @keyframes goldPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.13)}}
 
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{--gold:#edc66f;--gold-bright:#fff0bd;--gold-dark:#81551c;--ink:#08090b;--panel:#141518;--line:#6f572e}
+html,body,button,input{font-family:'Space Grotesk',Arial,sans-serif}
+body{background:#08090b;color:#f4ead1;letter-spacing:0}
+header{min-height:76px;padding:12px 19px;background:#090a0c;border-bottom:1px solid #8e6a32;box-shadow:0 8px 26px #000a}
+.logo{font-family:'Barlow Condensed',sans-serif;font-size:25px;font-weight:900;letter-spacing:2.8px;color:#f5d78e;text-transform:uppercase}
+.brand-mark{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #e9c46e;box-shadow:0 0 0 3px #d5a84b1c,0 0 22px #d5a84b55}
+.brand-wordmark small{font-family:'Space Grotesk',sans-serif;font-size:8px;letter-spacing:4px;color:#b99550}
+.pill{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;border-radius:5px;padding:7px 12px;background:#211a10;border:1px solid #a17a39;color:#f8dfa1}
+main{padding-top:25px}
+.page h2{font-family:'Barlow Condensed',sans-serif;font-size:29px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:#f5dfad}
+.home-welcome h2{font-family:'Barlow Condensed',sans-serif;font-size:34px;letter-spacing:1px;text-transform:uppercase}
+.eyebrow,.home-section-label,.tasks-tag,.tasks-section-title,.wallet-topline,.conversion-heading{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#d8b76f}
+.card{border-radius:12px;border:1px solid #594522;background:linear-gradient(145deg,#1d1b17,#111214 68%);box-shadow:0 14px 30px #0009,inset 0 1px #fff1}
+.balance{border-radius:17px;padding:27px 23px;background:linear-gradient(125deg,#47351a 0%,#272016 37%,#111317 82%);border:1px solid #d0a34d;box-shadow:0 18px 38px #000b,inset 0 1px #fff5,inset 0 -3px #704a1b}
+.balance .muted:first-child{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2.5px;color:#e5ca8d}
+.balance .coin{width:55px;height:55px;border-radius:50%;font-size:0;margin:17px 0 12px;background:#241b0e url('assets/lte-mining-logo.svg') center/cover no-repeat;border:2px solid #eac56d;box-shadow:0 5px 15px #000a,0 0 22px #d8aa4b44}
+.amount{font-family:'Barlow Condensed',sans-serif;font-size:54px;font-weight:800;letter-spacing:.5px;color:#ffedbb;text-shadow:0 2px #76501c,0 5px 20px #e5b95844}
+.balance .muted:last-child{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2.8px}
+button{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;border-radius:7px 7px 7px 2px;border:1px solid #ffe4a0;background:linear-gradient(180deg,#fff0bb 0%,#e4b957 48%,#9b6a25 100%);color:#171006;padding:14px 19px;box-shadow:0 5px 0 #654316,0 9px 20px #0008,inset 0 1px #fff;transition:transform .12s,filter .12s,box-shadow .12s}
+button:active{transform:translateY(3px);box-shadow:0 2px 0 #654316,0 4px 10px #0008;filter:brightness(1.08)}
+button:disabled{background:linear-gradient(180deg,#5d5138,#30291d);border-color:#78613a;color:#b7a47c;box-shadow:0 3px 0 #17130d;opacity:1}
+.primary{min-height:52px;border-radius:8px 8px 8px 2px;font-size:17px;letter-spacing:1.7px}
+input{font-family:'Space Grotesk',sans-serif;border-radius:7px;background:#0c0d0f;border:1px solid #73592d;color:#fff0bd}
+.mining-hero{border-radius:15px;background:radial-gradient(ellipse at 50% 20%,#58401b 0%,#211c14 40%,#111317 78%);border:1px solid #ad833d}
+.mining-kicker{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:3px;color:#f0d28a}
+.mining-ring{width:min(69vw,260px);padding:8px;background:conic-gradient(#fff1c1,#bd872e,#f4d98e,#81551c,#f9e7ad,#bd872e);box-shadow:0 0 0 2px #f1d38a55,0 0 36px #d9a94455,0 14px 28px #000c}
+.mining-ring-inner{background:radial-gradient(circle at 35% 25%,#45351b,#151619 70%);border:2px solid #e2bd6c}
+.mining-time{font-family:'Barlow Condensed',sans-serif;font-size:39px;letter-spacing:2px;color:#fff0bd}
+.mining-caption{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px}
+.mining-state{border-radius:5px;font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;background:#20190e;border:1px solid #a27b37;color:#f5d992}
+.mining-detail b{font-family:'Barlow Condensed',sans-serif;font-size:19px;letter-spacing:.5px;color:#ffe8ad}
+nav{background:#090a0c;border-top:1px solid #8e6a32;padding:9px 5px max(12px,env(safe-area-inset-bottom))}
+nav button{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-size:13px;letter-spacing:1.2px;border-radius:6px;background:transparent;color:#8e887c;box-shadow:none;padding:8px 3px}
+nav button:active{transform:none;box-shadow:none}
+nav button.active{color:#ffe7a6;background:linear-gradient(180deg,#d5a84b20,transparent);box-shadow:inset 0 2px #edc66f}
+.home-metric,.wallet-stat-card{border-radius:10px;background:linear-gradient(145deg,#272116,#121316);border:1px solid #6b512a}
+.home-metric strong,.wallet-stat-card b{font-family:'Barlow Condensed',sans-serif;font-size:25px;color:#f5d98f}
+.wallet-hero,.tasks-feature,.invite-hero,.profile-hero{border-radius:15px;background:linear-gradient(135deg,#332716,#191713 48%,#111317);border-color:#9c783a}
+.wallet-balance-line .amount{font-size:56px}
+.wallet-chip,.preview-tag,.coming-pill,.profile-soon{font-family:'Barlow Condensed',sans-serif;letter-spacing:1.8px;border-radius:4px}
+.task-reward strong{font-family:'Barlow Condensed',sans-serif;font-size:48px;color:#ffe5a2}
+.tasks-feature h3,.invite-hero h3{font-family:'Barlow Condensed',sans-serif;font-size:27px;letter-spacing:.6px;text-transform:uppercase}
+.profile-name{font-family:'Barlow Condensed',sans-serif;font-size:27px;letter-spacing:.7px;text-transform:uppercase}
+.profile-avatar{border-radius:50%;background:#111 url('assets/lte-mining-logo.svg') center/cover no-repeat;border:2px solid #d8b45d}
+.account-tabs{border-radius:8px;background:#0d0e10;border-color:#65502d}
+.account-tab{font-family:'Barlow Condensed',sans-serif;font-size:15px;letter-spacing:1px;text-transform:uppercase;border-radius:5px}
+.account-tab.active{background:linear-gradient(180deg,#47351b,#20190f);border:1px solid #c29a4c;color:#ffe8ad}
+.conversion-card{border-radius:10px;border-color:#96723a}
+.conversion-rate{font-family:'Barlow Condensed',sans-serif;font-size:25px;color:#ffe5a2}
+@media(max-width:390px){.home-welcome h2{font-size:29px}.amount{font-size:47px}.mining-time{font-size:32px}.brand-mark{width:43px;height:43px}}
 </style>
 </head>
 <body>

@@ -28,6 +28,79 @@ nav button.active{color:#d99aff}
 .page.active{display:block}
 .stat{display:flex;justify-content:space-between;margin:13px 0}
 input{background:#211632;border:1px solid #634083;color:white;padding:12px;border-radius:10px;width:100%}
+
+/* LTE MINING — visual refinement */
+body {
+  background: radial-gradient(ellipse at 50% 0%, #211033 0%, #090711 55%);
+}
+header {
+  background: linear-gradient(120deg, rgba(28,16,43,.96), rgba(12,9,20,.96));
+  border-bottom: 1px solid rgba(173,105,235,.24);
+}
+.logo {
+  letter-spacing: 1.2px;
+  text-shadow: 0 0 18px rgba(189,131,255,.42);
+}
+.pill {
+  border: 1px solid rgba(189,131,255,.25);
+  box-shadow: 0 0 16px rgba(150,59,232,.12);
+}
+.card {
+  background: linear-gradient(145deg, rgba(43,24,66,.96), rgba(17,12,29,.98));
+  border: 1px solid rgba(154,91,207,.48);
+  box-shadow: 0 10px 28px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.035);
+  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.balance {
+  padding: 34px 14px;
+  border-color: rgba(190,128,255,.62);
+  box-shadow: 0 12px 34px rgba(130,55,205,.16), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.coin {
+  filter: drop-shadow(0 0 14px rgba(185,117,255,.42));
+}
+.amount {
+  text-shadow: 0 0 20px rgba(190,128,255,.32);
+  letter-spacing: .5px;
+}
+button {
+  font-weight: 700;
+  box-shadow: 0 5px 16px rgba(111,43,177,.18);
+  transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
+}
+button:active {
+  transform: scale(.97);
+  filter: brightness(1.12);
+}
+button.primary {
+  background: linear-gradient(110deg, #ad4cff, #7636d9);
+  box-shadow: 0 7px 22px rgba(145,55,232,.32);
+}
+nav {
+  background: rgba(18,13,29,.97);
+  border-top: 1px solid rgba(154,91,207,.42);
+  box-shadow: 0 -8px 24px rgba(0,0,0,.22);
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+nav button {
+  border-radius: 12px;
+  box-shadow: none;
+}
+nav button.active {
+  color: #e0baff;
+  text-shadow: 0 0 12px rgba(189,131,255,.65);
+}
+.page h2 {
+  letter-spacing: .2px;
+}
+input {
+  outline: none;
+}
+input:focus {
+  border-color: #bd83ff;
+  box-shadow: 0 0 0 3px rgba(189,131,255,.12);
+}
+
 </style>
 </head>
 <body>

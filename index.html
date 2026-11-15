@@ -255,12 +255,12 @@ nav button.active{color:#f3dca5;background:linear-gradient(180deg,#d5a84b18,tran
  <div class="card home-overview-card">
   <div class="stat"><span>Mining status</span><b id="status">Inactive</b></div>
   <div class="stat"><span>Mining rate</span><b>10 LTE / hour</b></div>
-  <div class="stat"><span>Session length</span><b>24 hours</b></div>
+  <div class="stat"><span>Session length</span><b>8 hours</b></div>
   <button class="primary" id="mineBtn" onclick="startMining()">START MINING&nbsp; →</button>
  </div>
  <div class="home-metrics">
   <div class="card home-metric"><span class="muted">LIFETIME EARNINGS</span><strong id="earned">0.00 LTE</strong><small>Accumulated demo points</small></div>
-  <div class="card home-metric"><span class="muted">SESSION LENGTH</span><strong>24 HRS</strong><small>Per mining session</small></div>
+  <div class="card home-metric"><span class="muted">SESSION LENGTH</span><strong>8 HRS</strong><small>Per mining session</small></div>
  </div>
 
  <div class="home-section-label">MINING CENTER</div>
@@ -275,13 +275,13 @@ nav button.active{color:#f3dca5;background:linear-gradient(180deg,#d5a84b18,tran
    </div>
   </div>
   <div class="mining-state"><span class="live-dot"></span> MINING SESSION</div>
-  <p class="muted mining-description">Your LTE mining session is running. Keep this session active until the countdown ends.</p>
+  <p class="muted mining-description">Your LTE points accrue continuously while the 8-hour session is active.</p>
   <button class="primary" onclick="startMining()">START / CLAIM MINING</button>
  </div>
  <div class="card mining-details">
   <div class="mining-detail"><span>Mining speed</span><b>10 <small>LTE / hour</small></b></div>
-  <div class="mining-detail"><span>Session duration</span><b>24 hours</b></div>
-  <div class="mining-detail"><span>Session reward</span><b>240 <small>LTE</small></b></div>
+  <div class="mining-detail"><span>Session duration</span><b>8 hours</b></div>
+  <div class="mining-detail"><span>Session reward</span><b>80 <small>LTE</small></b></div>
  </div>
 </section>
 
@@ -396,6 +396,8 @@ let balance=get('lteBalance',0);
 let earned=get('lteEarned',0);
 let end=get('lteEnd',0);
 let last=get('lteLast',0);
+const MINING_DURATION=8*60*60*1000;
+const MINING_RATE=10;
 let claimed=get('lteDaily',false);
 
 function save(){
@@ -406,15 +408,18 @@ function save(){
  localStorage.setItem('lteDaily',JSON.stringify(claimed));
  render();
 }
+function currentMined(now=Date.now()){
+ if(!last||!end)return 0;
+ const elapsed=Math.max(0,Math.min(now-last,MINING_DURATION));
+ return elapsed/3600000*MINING_RATE;
+}
 function startMining(){
- if(end>Date.now()){alert('Mining is already active!');return;}
- if(end>0){
-  const reward=(end-last)/3600000*10;
-  balance+=Math.max(0,reward);
-  earned+=Math.max(0,reward);
- }
- last=Date.now();
- end=last+86400000;
+ const now=Date.now();
+ if(end>now){alert('Mining is already active!');return;}
+ const reward=currentMined(now);
+ if(reward>0){balance+=reward;earned+=reward;}
+ last=now;
+ end=last+MINING_DURATION;
  save();
 }
 function daily(){
@@ -452,21 +457,24 @@ function setupProfile(){
  }
 }
 function render(){
- document.getElementById('balance').textContent=balance.toFixed(2);
- document.getElementById('earned').textContent=earned.toFixed(2)+' LTE';
- document.getElementById('walletBalance').textContent=balance.toFixed(2);
- document.getElementById('walletEarned').textContent=earned.toFixed(2)+' LTE';
+ const liveMined=currentMined();
+ const liveBalance=balance+liveMined;
+ const liveEarned=earned+liveMined;
+ document.getElementById('balance').textContent=liveBalance.toFixed(4);
+ document.getElementById('earned').textContent=liveEarned.toFixed(4)+' LTE';
+ document.getElementById('walletBalance').textContent=liveBalance.toFixed(4);
+ document.getElementById('walletEarned').textContent=liveEarned.toFixed(4)+' LTE';
  const claimed=get('lteClaimDay','')===new Date().toDateString();
  const dailyBtn=document.getElementById('dailyBtn');
  const dailyStatus=document.getElementById('dailyStatus');
  if(dailyBtn){dailyBtn.disabled=claimed;dailyBtn.textContent=claimed?'DAILY REWARD CLAIMED':'CLAIM 50 LTE';}
  if(dailyStatus){dailyStatus.textContent=claimed?'Claimed today':'Available today';}
  const active=end>Date.now();
- document.getElementById('status').textContent=active?'Mining':'Inactive';
+ document.getElementById('status').textContent=active?'Mining · Live':'Completed · Ready';
  const profileMiningStatus=document.getElementById('profileMiningStatus');
  if(profileMiningStatus)profileMiningStatus.textContent=active?'Active':'Inactive';
  document.getElementById('mineBtn').disabled=active;
- document.getElementById('mineBtn').textContent=active?'MINING ACTIVE':'⚡ START MINING';
+ document.getElementById('mineBtn').textContent=active?'MINING ACTIVE':'⚡ CLAIM & START 8H';
 }
 function showPage(id,btn){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -492,12 +500,13 @@ function tick(){
    String(Math.floor(s/3600)).padStart(2,'0')+':'+
    String(Math.floor(s%3600/60)).padStart(2,'0')+':'+
    String(s%60).padStart(2,'0');
-  const progress=Math.max(0,Math.min(100,(1-remaining/86400000)*100));
+  const progress=Math.max(0,Math.min(100,((Date.now()-last)/MINING_DURATION)*100));
   ring.style.setProperty('--progress',progress+'%');
  }else{
   timer.textContent='00:00:00';
-  ring.style.setProperty('--progress','0%');
+  ring.style.setProperty('--progress','100%');
  }
+ render();
 }
 setupProfile();
 render();

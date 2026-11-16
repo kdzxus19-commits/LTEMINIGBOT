@@ -68,7 +68,7 @@ nav button.active{color:var(--gold2);background:#d5a84b12;box-shadow:inset 0 0 0
 #home .mining-hero{text-align:center;padding:28px 20px}
 #home .mining-hero .coin{font-size:48px}
 #home .mining-hero .primary{max-width:320px}
-#tasks .card,#account-referral .card,#account-wallet .card,#account-profile .card{border-color:#35383e}
+#tasks .card,#account-payment .card,#account-wallet .card,#account-profile .card{border-color:#35383e}
 #account-wallet .amount{margin:12px 0}
 @media(min-width:420px){main{padding-left:20px;padding-right:20px}.balance{padding:27px}}
 
@@ -225,7 +225,7 @@ nav button.active{color:#f3dca5;background:linear-gradient(180deg,#d5a84b18,tran
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
 
-/* Unified Account area: Profile, Wallet and Referrals */
+/* Unified Account area: Profile, Wallet and Payment */
 .account-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:6px;margin:0 0 16px;border:1px solid #39352c;border-radius:15px;background:#111318}
 .account-tab{min-width:0;padding:11px 5px;border:1px solid transparent;border-radius:10px;background:transparent;color:#a9a39a;font-size:11px;box-shadow:none;white-space:nowrap}
 .account-tab.active{color:#f3dfa9;background:#d5a84b18;border-color:#80683d;box-shadow:inset 0 0 0 1px #9b783c22}
@@ -626,7 +626,7 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
  <div class="account-tabs" role="tablist" aria-label="Account sections">
   <button class="account-tab active" type="button" onclick="showAccountPanel('profile',this)">PROFILE</button>
   <button class="account-tab" type="button" onclick="showAccountPanel('wallet',this)">WALLET</button>
-  <button class="account-tab" type="button" onclick="showAccountPanel('referral',this)">REFERRALS</button>
+  <button class="account-tab" type="button" onclick="showAccountPanel('payment',this)">PAYMENT</button>
  </div>
  <div id="account-profile" class="account-panel active"><h2>My Profile</h2>
  <div class="card profile-hero">
@@ -683,34 +683,16 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
   <button onclick="alert('Real withdrawals are not enabled.')">Coming Soon</button>
  </div>
  <p class="wallet-disclaimer">LTE points are demo points, not real cryptocurrency or a monetary balance.</p></div>
- <div id="account-referral" class="account-panel"><h2>Invite Friends</h2>
- <div class="card invite-hero">
-  <div class="invite-art">♧</div>
-  <div class="invite-eyebrow">GROW THE LTE COMMUNITY</div>
-  <h3>Mining is better together.</h3>
-  <p class="muted">Invite friends. When a friend links a wallet and completes a confirmed 0.05 GRAM payment, you receive 50 LTE. No welcome reward.</p>
-  <div class="invite-status"><span class="invite-status-dot"></span> 50 LTE AFTER 0.05 GRAM PAYMENT</div>
-  <div class="invite-step"><span>CODE</span><div><b id="myReferralCode">Loading…</b><p class="muted">Your personal invite code</p></div></div>
-  <div class="invite-step"><span>LINK</span><div style="min-width:0;flex:1"><input id="myReferralLink" readonly value="Open inside Telegram to load your link" style="font-size:10px"></div></div>
-  <button class="primary" id="copyReferralLink" type="button">COPY INVITE LINK</button>
-  <div class="invite-status" style="margin-top:15px">QUALIFIED REFERRALS: <b id="qualifiedReferralCount">0</b></div>
- </div>
+ <div id="account-payment" class="account-panel"><h2>Mining Activation</h2>
  <div class="card invite-payment-card">
-  <div class="invite-eyebrow">REFERRAL QUALIFICATION</div>
-  <h3 style="color:#f1e3c5;margin:12px 0 7px">Confirm your 0.05 GRAM payment</h3>
-  <p class="muted" style="line-height:1.6">After linking your wallet, send exactly 0.05 GRAM to the project wallet. The inviter receives 50 LTE only after the network confirms the payment.</p>
+  <div class="invite-eyebrow">ONE-TIME ACTIVATION</div><h3 style="color:#f1e3c5;margin:12px 0 7px">Activate LTE Mining</h3>
+  <p class="muted" style="line-height:1.6">Pay exactly 0.05 GRAM once to activate mining on this Telegram account. After TON network confirmation, mining is unlocked permanently for this account. No second payment is required.</p>
   <p class="muted" style="overflow-wrap:anywhere;font-size:10px">Destination: UQDt-rCzwylBWPzIx8toN3jNuvTnSzVh_NPxhQUSjsN1zWgY</p>
-  <p class="muted" style="font-size:10px;line-height:1.5">Payments are irreversible. Check the amount and destination in your wallet before approving. Never share your recovery phrase.</p>
-  <button class="primary" id="payReferralFee" type="button">PAY 0.05 GRAM</button>
-  <button class="primary" id="verifyReferralPayment" type="button" style="margin-top:9px;background:#27251f;color:#e8d5a5;border-color:#80683d">I HAVE PAID · VERIFY</button>
-  <p class="ton-connect-status" id="referralPaymentStatus" aria-live="polite">Link your wallet first. No payment is taken automatically.</p>
- </div>
- <div class="card invite-steps">
-  <div class="invite-step"><span>01</span><div><b>Your personal link</b><p class="muted">A unique Telegram invite link will be generated for your account.</p></div></div>
-  <div class="invite-step"><span>02</span><div><b>Friends join</b><p class="muted">Friends will be able to open the mini app through your link.</p></div></div>
-  <div class="invite-step"><span>03</span><div><b>Referral rewards</b><p class="muted">After wallet linking, your friend completes a confirmed 0.05 GRAM payment. Then you receive 50 LTE.</p></div></div>
- </div>
- <p class="invite-note">Referral rewards are issued only after a confirmed 0.05 GRAM payment.</p></div>
+  <p class="muted" style="font-size:10px;line-height:1.5">Payments are irreversible. Verify amount and destination before approving. Never share your recovery phrase.</p>
+  <button class="primary" id="payActivationFee" type="button">PAY 0.05 GRAM TO ACTIVATE</button>
+  <button class="primary" id="verifyActivationPayment" type="button" style="margin-top:9px;background:#27251f;color:#e8d5a5;border-color:#80683d">I HAVE PAID · VERIFY</button>
+  <p class="ton-connect-status" id="activationPaymentStatus" aria-live="polite">Connect your TON wallet first. No payment is taken automatically.</p>
+ </div><p class="invite-note">One confirmed activation payment unlocks mining for this Telegram account.</p></div>
 </section>
 </main>
 
@@ -733,6 +715,15 @@ const MINING_RATE=10;
 // Shorten any previously active 24-hour demo session to the new 8-hour limit.
 if(last>0&&end>last+MINING_DURATION)end=last+MINING_DURATION;
 let claimed=get('lteDaily',false);
+let ltePaymentConfirmed=false;
+function openActivationPanel(){
+ const accountButton=document.querySelector('nav button[aria-label="Account"]');
+ if(accountButton)showPage('account',accountButton);
+ const paymentTab=document.querySelector('.account-tab[onclick*="payment"]');
+ showAccountPanel('payment',paymentTab);
+ const status=document.getElementById('activationPaymentStatus');
+ if(status)status.textContent='A confirmed 0.05 GRAM activation payment is required before mining.';
+}
 
 function save(){
  localStorage.setItem('lteBalance',JSON.stringify(balance));
@@ -748,6 +739,7 @@ function currentMined(now=Date.now()){
  return elapsed/3600000*MINING_RATE;
 }
 function startMining(){
+ if(!ltePaymentConfirmed){openActivationPanel();return;}
  const now=Date.now();
  if(end>now){alert('Mining is already active!');return;}
  const reward=currentMined(now);
@@ -757,6 +749,7 @@ function startMining(){
  save();
 }
 function daily(){
+ if(!ltePaymentConfirmed){openActivationPanel();return;}
  const today=new Date().toDateString();
  if(get('lteClaimDay','')===today){alert('Already checked in today!');return;}
  const yesterday=new Date(Date.now()-86400000).toDateString();
@@ -883,14 +876,14 @@ function render(){
  if(hintEl)hintEl.textContent=claimed?'Come back tomorrow for the next day':'Your next reward is ready to collect';
  if(progressEl)progressEl.style.width=(completedDays/7*100)+'%';
  if(progressLabel)progressLabel.textContent=completedDays+' / 7 completed';
- if(dailyBtn){dailyBtn.disabled=claimed;dailyBtn.textContent=claimed?'CHECKED IN · +50 LTE':'CLAIM DAY '+journeyDay+' · 50 LTE';}
+ if(dailyBtn){dailyBtn.disabled=claimed||!ltePaymentConfirmed;dailyBtn.textContent=!ltePaymentConfirmed?'ACTIVATE TO UNLOCK':claimed?'CHECKED IN · +50 LTE':'CLAIM DAY '+journeyDay+' · 50 LTE';}
  if(dailyStatus)dailyStatus.textContent=claimed?'Reward collected today':'Day '+journeyDay+' is ready';
  const active=end>Date.now();
  document.getElementById('status').textContent=active?'Mining · Live':'Completed · Ready';
  const profileMiningStatus=document.getElementById('profileMiningStatus');
  if(profileMiningStatus)profileMiningStatus.textContent=active?'Active':'Inactive';
- document.getElementById('mineBtn').disabled=active;
- document.getElementById('mineBtn').textContent=active?'MINING ACTIVE':'⚡ CLAIM & START 8H';
+ document.getElementById('mineBtn').disabled=active||!ltePaymentConfirmed;
+ document.getElementById('mineBtn').textContent=active?'MINING ACTIVE':!ltePaymentConfirmed?'PAY 0.05 GRAM TO START':'⚡ CLAIM & START 8H';
 }
 function showPage(id,btn){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -935,23 +928,6 @@ setInterval(loadGramMarketPrice,60000);
 const SUPABASE_URL='https://jzsufmqsthbgoyynkakj.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_Hm8U15Rx0nQPcNjb1wYVBg_x8q8Exof';
 
-function getLteReferralStartParam(){
- const webApp=window.Telegram&&window.Telegram.WebApp;
- const unsafeParam=webApp&&webApp.initDataUnsafe&&webApp.initDataUnsafe.start_param;
- const initParams=new URLSearchParams(webApp&&webApp.initData?webApp.initData:'');
- const queryParams=new URLSearchParams(window.location.search);
- const hashParams=new URLSearchParams((window.location.hash||'').replace(/^#/,''));
- const raw=unsafeParam
-  ||initParams.get('start_param')
-  ||queryParams.get('tgWebAppStartParam')
-  ||queryParams.get('startapp')
-  ||queryParams.get('start_param')
-  ||hashParams.get('tgWebAppStartParam')
-  ||hashParams.get('startapp')
-  ||hashParams.get('start_param')
-  ||'';
- return String(raw).trim().replace(/^ref_/i,'').toUpperCase();
-}
 
 async function checkLteBackend(){
  const el=document.getElementById('backendStatus');
@@ -974,16 +950,11 @@ async function checkLteBackend(){
      'apikey':SUPABASE_PUBLISHABLE_KEY,
      'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY
     },
-    body:JSON.stringify({action:'sync-profile',initData,referralCode:getLteReferralStartParam()})
+    body:JSON.stringify({action:'sync-profile',initData})
    });
    const syncData=await syncResponse.json();
    if(!syncResponse.ok||!syncData.success)throw new Error(syncData.error||'Account sync failed');
-   const referralDebug=syncData.referral_code_received
-    ?(syncData.referral_code_matches_inviter
-      ?(syncData.referral_bound?'Referral linked':'Referral code found · link not completed')
-      :'Referral code received · inviter not found')
-    :'No referral code detected';
-   el.textContent='Backend connected · Telegram account verified · '+referralDebug;
+   el.textContent='Backend connected · Telegram account verified';
   }else{
    el.textContent='Backend connected · Open inside Telegram to sync your account';
   }
@@ -1019,29 +990,13 @@ window.lteBackendReady=checkLteBackend();
    if(!response.ok||!data.success)throw new Error(data.error||'Request failed');
    return data;
   };
-  async function loadReferralInfo(){
-   try{
-    const data=await api('get-referrals');
-    const codeEl=document.getElementById('myReferralCode');
-    const countEl=document.getElementById('qualifiedReferralCount');
-    const linkEl=document.getElementById('myReferralLink');
-    if(codeEl)codeEl.textContent=data.referral_code||'—';
-    if(countEl)countEl.textContent=String(data.qualified_count||0);
-    if(linkEl&&data.referral_code){
-     const link='https://t.me/lteminigbot?startapp='+encodeURIComponent(data.referral_code);
-     linkEl.value=link;
-     const copyBtn=document.getElementById('copyReferralLink');
-     if(copyBtn)copyBtn.onclick=()=>{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(link).then(()=>alert('Referral link copied!')).catch(()=>alert(link));}else{linkEl.select();document.execCommand('copy');alert('Referral link copied!');}};
-    }
-   }catch(error){console.warn('Referral info unavailable:',error);}
-  }
+
   async function saveWallet(address){
    try{
     const data=await api('link-wallet',{address});
     statusEl.textContent='Wallet linked · '+address.slice(0,6)+'…'+address.slice(-6);
     statusEl.dataset.address=address;
-    if(data.referral_rewarded)alert('Referral qualified! The inviter received 50 LTE.');
-    await loadReferralInfo();
+
    }catch(error){
     statusEl.textContent=error.message||'Could not save wallet address.';
    }
@@ -1067,17 +1022,18 @@ window.lteBackendReady=checkLteBackend();
    }catch(_){return '';}
   }
 
-  const payButton=document.getElementById('payReferralFee');
-  const verifyButton=document.getElementById('verifyReferralPayment');
-  const paymentStatus=document.getElementById('referralPaymentStatus');
-  async function verifyReferralPayment(){
+  const payButton=document.getElementById('payActivationFee');
+  const verifyButton=document.getElementById('verifyActivationPayment');
+  const paymentStatus=document.getElementById('activationPaymentStatus');
+  async function verifyActivationPayment(){
    if(paymentStatus)paymentStatus.textContent='Checking the TON network…';
    try{
     const result=await api('verify-payment');
     if(result.status==='confirmed'){
-     if(paymentStatus)paymentStatus.textContent=result.referral_rewarded?'Payment confirmed · Your inviter received 50 LTE.':'Payment confirmed · No referral reward was due for this account.';
-     if(payButton)payButton.disabled=true;
-     await loadReferralInfo();
+     ltePaymentConfirmed=true;
+     if(paymentStatus)paymentStatus.textContent='Activation confirmed · Mining is now unlocked for this account.';
+     if(payButton){payButton.disabled=true;payButton.textContent='ACTIVATION PAID ✓';}
+     render();
      return true;
     }
     if(paymentStatus)paymentStatus.textContent=result.message||'Payment is not visible yet. Wait a little and verify again.';
@@ -1087,13 +1043,19 @@ window.lteBackendReady=checkLteBackend();
     return false;
    }
   }
-  if(verifyButton)verifyButton.onclick=verifyReferralPayment;
+  if(verifyButton)verifyButton.onclick=verifyActivationPayment;
   if(payButton)payButton.onclick=async()=>{
    if(!tonConnectUI.wallet||!tonConnectUI.wallet.account){if(paymentStatus)paymentStatus.textContent='Connect your TON wallet first.';return;}
    payButton.disabled=true;
    if(paymentStatus)paymentStatus.textContent='Preparing payment request…';
    try{
-    const info=await api('get-referrals');
+    const info=await api('get-payment-status');
+    if(info.status==='confirmed'){
+     ltePaymentConfirmed=true;
+     if(paymentStatus)paymentStatus.textContent='Activation already confirmed · No second payment is required.';
+     if(payButton){payButton.disabled=true;payButton.textContent='ACTIVATION PAID ✓';}
+     render();return;
+    }
     const linked=info.wallet_address||'';
     const connected=tonConnectUI.wallet.account.address||'';
     if(!linked||rawAddressForUi(linked)!==rawAddressForUi(connected))throw new Error('Connect the same wallet that you linked to your account.');
@@ -1111,7 +1073,7 @@ window.lteBackendReady=checkLteBackend();
     let confirmed=false;
     for(let attempt=0;attempt<6;attempt++){
      await new Promise(resolve=>setTimeout(resolve,5000));
-     confirmed=await verifyReferralPayment();
+     confirmed=await verifyActivationPayment();
      if(confirmed)break;
     }
     if(!confirmed&&paymentStatus)paymentStatus.textContent='Payment may still be processing. Tap “I HAVE PAID · VERIFY” in a moment.';
@@ -1122,7 +1084,13 @@ window.lteBackendReady=checkLteBackend();
    }
   };
 
-  await loadReferralInfo();
+  try{
+   const activation=await api('get-payment-status');
+   ltePaymentConfirmed=activation.status==='confirmed';
+   if(ltePaymentConfirmed){if(paymentStatus)paymentStatus.textContent='Activation already confirmed · No second payment is required.';if(payButton){payButton.disabled=true;payButton.textContent='ACTIVATION PAID ✓';}}
+   else if(activation.status==='pending'&&paymentStatus)paymentStatus.textContent='A payment request is pending. Complete the transfer or verify it below.';
+   render();
+  }catch(error){if(paymentStatus)paymentStatus.textContent=error.message||'Could not check activation status.';}
  }catch(error){
   statusEl.textContent=error&&error.message?error.message:'Could not initialize wallet connection.';
  }

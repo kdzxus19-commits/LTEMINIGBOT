@@ -29,10 +29,11 @@ function rawTonAddress(value: string) {
 
 async function findConfirmedPayment(sourceAddress: string, createdAt: string) {
   const destination = "UQDt-rCzwylBWPzIx8toN3jNuvTnSzVh_NPxhQUSjsN1zWgY";
-  const url = new URL("https://toncenter.com/api/v2/getTransactions");
-  url.searchParams.set("address", destination);
-  url.searchParams.set("limit", "30");
-  const response = await fetch(url.toString(), { headers: { "Accept": "application/json" } });
+  const response = await fetch("https://toncenter.com/api/v2/getTransactions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+    body: JSON.stringify({ address: destination, limit: 30 }),
+  });
   if (!response.ok) throw new Error("Could not check the TON network. Try again shortly.");
   const payload = await response.json();
   if (!payload?.ok || !Array.isArray(payload.result)) throw new Error("TON network returned an invalid response.");
@@ -207,6 +208,7 @@ Deno.serve(async (req) => {
         .select("wallet_address, referred_by").eq("telegram_id", telegramId).maybeSingle();
       if (profileError || !profile) return json({ success: false, error: "Profile not found" }, 404);
       if (!profile.wallet_address) return json({ success: false, error: "Link your TON wallet first." }, 400);
+      if (!profile.referred_by) return json({ success: false, error: "This account has no inviter. A referral payment is not required." }, 400);
 
       const { data: alreadyPaid, error: paidError } = await supabase.from("lte_payments")
         .select("id").eq("telegram_id", telegramId).eq("status", "confirmed").limit(1);

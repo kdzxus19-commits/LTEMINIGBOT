@@ -144,38 +144,14 @@ Deno.serve(async (req) => {
         return json({ success: false, error: "Could not save Telegram profile" }, 500);
       }
 
-      const referralCode = String(body?.referralCode ?? "").trim().toUpperCase();
-      let inviterFound = false;
-      let referralBound = false;
-      if (referralCode) {
-        const { data: inviter, error: inviterError } = await supabase.from("profiles")
-          .select("telegram_id").eq("referral_code", referralCode).maybeSingle();
-        if (inviterError) console.error("Inviter lookup failed:", inviterError.message);
-        inviterFound = Boolean(inviter && Number(inviter.telegram_id) !== telegramId);
-        if (inviterFound) {
-          const { data: currentProfile } = await supabase.from("profiles")
-            .select("referred_by").eq("telegram_id", telegramId).maybeSingle();
-          if (!currentProfile?.referred_by) {
-            const { error: bindError } = await supabase.from("profiles").update({ referred_by: Number(inviter.telegram_id) })
-              .eq("telegram_id", telegramId).is("referred_by", null);
-            if (bindError) console.error("Referral binding failed:", bindError.message);
-            else referralBound = true;
-          }
-        }
-      }
-
       const { data: profile } = await supabase.from("profiles")
-        .select("referral_code, wallet_address, referred_by").eq("telegram_id", telegramId).single();
+        .select("wallet_address").eq("telegram_id", telegramId).single();
       return json({
         success: true,
         message: "Telegram account verified and profile synchronized",
         telegram_id: telegramId,
         username: user.username ?? null,
-        referral_code: profile?.referral_code ?? null,
         wallet_address: profile?.wallet_address ?? null,
-        referral_code_received: Boolean(referralCode),
-        referral_code_matches_inviter: inviterFound,
-        referral_bound: referralBound || Boolean(profile?.referred_by),
       });
     }
 
@@ -203,24 +179,15 @@ Deno.serve(async (req) => {
         return json({ success: false, error: "Could not save wallet address" }, 500);
       }
 
-      // Linking a wallet alone no longer qualifies a referral.
-      // Referral rewards are issued only after a confirmed 0.05 GRAM payment.
-      return json({
-        success: true,
-        wallet_address: address,
-        referral_rewarded: false,
-        referral_status: "payment_required",
-        message: "Wallet address linked. A confirmed 0.05 GRAM payment is required to qualify the referral.",
-      });
+      return json({ success: true, wallet_address: address, message: "TON wallet address linked." });
     }
 
 
     if (body?.action === "create-payment") {
       const { data: profile, error: profileError } = await supabase.from("profiles")
-        .select("wallet_address, referred_by").eq("telegram_id", telegramId).maybeSingle();
+        .select("wallet_address").eq("telegram_id", telegramId).maybeSingle();
       if (profileError || !profile) return json({ success: false, error: "Profile not found" }, 404);
       if (!profile.wallet_address) return json({ success: false, error: "Link your TON wallet first." }, 400);
-      if (!profile.referred_by) return json({ success: false, error: "This account has no inviter. A referral payment is not required." }, 400);
 
       const { data: alreadyPaid, error: paidError } = await supabase.from("lte_payments")
         .select("id").eq("telegram_id", telegramId).eq("status", "confirmed").limit(1);
@@ -249,7 +216,7 @@ Deno.serve(async (req) => {
 
     if (body?.action === "verify-payment") {
       const { data: profile, error: profileError } = await supabase.from("profiles")
-        .select("wallet_address, referred_by").eq("telegram_id", telegramId).maybeSingle();
+        .select("wallet_address").eq("telegram_id", telegramId).maybeSingle();
       if (profileError || !profile) return json({ success: false, error: "Profile not found" }, 404);
       if (!profile.wallet_address) return json({ success: false, error: "Link your TON wallet first." }, 400);
 
@@ -263,11 +230,7 @@ Deno.serve(async (req) => {
           .select("id, transaction_hash").eq("telegram_id", telegramId)
           .eq("status", "confirmed").limit(1).maybeSingle();
         if (confirmed) {
-          const { data: rewardRows, error: rewardError } = await supabase.rpc("qualify_lte_referral", {
-            p_invitee_telegram_id: telegramId,
-          });
-          if (rewardError) return json({ success: false, error: "Payment confirmed, but referral reward needs retry." }, 500);
-          return json({ success: true, status: "confirmed", already_confirmed: true, referral_rewarded: Boolean(rewardRows?.[0]?.rewarded) });
+          return json({ success: true, status: "confirmed", already_confirmed: true, message: "Activation payment already confirmed." });
         }
         return json({ success: false, error: "No pending payment was found. Start the payment first." }, 404);
       }
@@ -283,32 +246,34 @@ Deno.serve(async (req) => {
         return json({ success: false, error: "Could not record payment confirmation. Please retry." }, 500);
       }
 
-      const { data: rewardRows, error: rewardError } = await supabase.rpc("qualify_lte_referral", {
-        p_invitee_telegram_id: telegramId,
-      });
-      if (rewardError) {
-        console.error("Referral reward failed after confirmed payment:", rewardError.message);
-        return json({ success: false, error: "Payment confirmed, but referral reward needs retry." }, 500);
-      }
       return json({
         success: true,
         status: "confirmed",
         transaction_hash: txHash,
-        referral_rewarded: Boolean(rewardRows?.[0]?.rewarded),
-        message: "Payment confirmed on the TON network.",
+        message: "Activation payment confirmed on the TON network.",
       });
     }
 
-    if (body?.action === "get-referrals") {
+    if (body?.action === "get-payment-status") {
       const { data: profile, error: profileError } = await supabase.from("profiles")
-        .select("referral_code, wallet_address").eq("telegram_id", telegramId).maybeSingle();
+        .select("wallet_address").eq("telegram_id", telegramId).maybeSingle();
       if (profileError || !profile) return json({ success: false, error: "Profile not found" }, 404);
-      const { count, error: countError } = await supabase.from("lte_referrals")
-        .select("id", { count: "exact", head: true })
-        .eq("inviter_telegram_id", telegramId).eq("status", "qualified");
-      if (countError) return json({ success: false, error: "Could not load referrals" }, 500);
-      return json({ success: true, referral_code: profile.referral_code, qualified_count: count ?? 0, wallet_address: profile.wallet_address });
+      const { data: confirmed, error: confirmedError } = await supabase.from("lte_payments")
+        .select("id, transaction_hash").eq("telegram_id", telegramId)
+        .eq("status", "confirmed").limit(1).maybeSingle();
+      if (confirmedError) return json({ success: false, error: "Could not check activation status." }, 500);
+      const { data: pending, error: pendingError } = await supabase.from("lte_payments")
+        .select("id, created_at").eq("telegram_id", telegramId).eq("status", "pending")
+        .order("created_at", { ascending: false }).limit(1).maybeSingle();
+      if (pendingError) return json({ success: false, error: "Could not check pending payment." }, 500);
+      return json({
+        success: true,
+        status: confirmed ? "confirmed" : pending ? "pending" : "unpaid",
+        wallet_address: profile.wallet_address,
+        transaction_hash: confirmed?.transaction_hash ?? null,
+      });
     }
+
 
     return json({ success: false, error: "Unknown action" }, 400);
   } catch (error) {

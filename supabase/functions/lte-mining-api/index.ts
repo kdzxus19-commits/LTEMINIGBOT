@@ -158,18 +158,14 @@ Deno.serve(async (req) => {
         return json({ success: false, error: "Could not save wallet address" }, 500);
       }
 
-      const { data: rewardRows, error: rewardError } = await supabase.rpc("qualify_lte_referral", {
-        p_invitee_telegram_id: telegramId
-      });
-      if (rewardError) {
-        console.error("Referral qualification failed:", rewardError.message);
-        return json({ success: false, error: "Wallet linked, but referral reward could not be processed. Please retry." }, 500);
-      }
+      // Linking a wallet alone no longer qualifies a referral.
+      // Referral rewards are issued only after a confirmed 0.05 GRAM payment.
       return json({
         success: true,
         wallet_address: address,
-        referral_rewarded: Array.isArray(rewardRows) ? Boolean(rewardRows[0]?.rewarded) : Boolean(rewardRows?.rewarded),
-        message: "Wallet address linked",
+        referral_rewarded: false,
+        referral_status: "payment_required",
+        message: "Wallet address linked. A confirmed 0.05 GRAM payment is required to qualify the referral.",
       });
     }
 

@@ -6,6 +6,7 @@
 // Never expose either secret in the frontend.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { Address } from "https://esm.sh/@ton/core@0.59.1";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -18,6 +19,37 @@ function json(data: unknown, status = 200) {
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
+}
+
+
+function rawTonAddress(value: string) {
+  try { return Address.parse(value).toRawString().toLowerCase(); }
+  catch { return ""; }
+}
+
+async function findConfirmedPayment(sourceAddress: string, createdAt: string) {
+  const destination = "UQDt-rCzwylBWPzIx8toN3jNuvTnSzVh_NPxhQUSjsN1zWgY";
+  const url = new URL("https://toncenter.com/api/v2/getTransactions");
+  url.searchParams.set("address", destination);
+  url.searchParams.set("limit", "30");
+  const response = await fetch(url.toString(), { headers: { "Accept": "application/json" } });
+  if (!response.ok) throw new Error("Could not check the TON network. Try again shortly.");
+  const payload = await response.json();
+  if (!payload?.ok || !Array.isArray(payload.result)) throw new Error("TON network returned an invalid response.");
+  const expectedSource = rawTonAddress(sourceAddress);
+  const expectedDestination = rawTonAddress(destination);
+  const notBefore = Math.floor(new Date(createdAt).getTime() / 1000) - 90;
+  for (const tx of payload.result) {
+    const msg = tx?.in_msg;
+    if (!msg || msg.bounced === true) continue;
+    if (Number(msg.value) !== 50000000) continue;
+    if (Number(tx.utime) < notBefore) continue;
+    if (rawTonAddress(msg.source || "") !== expectedSource) continue;
+    if (rawTonAddress(msg.destination || "") !== expectedDestination) continue;
+    const hash = String(tx?.transaction_id?.hash || "");
+    if (hash) return hash;
+  }
+  return null;
 }
 
 function constantTimeEqual(a: string, b: string) {
@@ -166,6 +198,90 @@ Deno.serve(async (req) => {
         referral_rewarded: false,
         referral_status: "payment_required",
         message: "Wallet address linked. A confirmed 0.05 GRAM payment is required to qualify the referral.",
+      });
+    }
+
+
+    if (body?.action === "create-payment") {
+      const { data: profile, error: profileError } = await supabase.from("profiles")
+        .select("wallet_address, referred_by").eq("telegram_id", telegramId).maybeSingle();
+      if (profileError || !profile) return json({ success: false, error: "Profile not found" }, 404);
+      if (!profile.wallet_address) return json({ success: false, error: "Link your TON wallet first." }, 400);
+
+      const { data: alreadyPaid, error: paidError } = await supabase.from("lte_payments")
+        .select("id").eq("telegram_id", telegramId).eq("status", "confirmed").limit(1);
+      if (paidError) return json({ success: false, error: "Could not check previous payment." }, 500);
+      if (alreadyPaid?.length) return json({ success: false, error: "A payment is already confirmed for this account." }, 409);
+
+      const { data: existing, error: existingError } = await supabase.from("lte_payments")
+        .select("id, created_at").eq("telegram_id", telegramId).eq("status", "pending")
+        .order("created_at", { ascending: false }).limit(1).maybeSingle();
+      if (existingError) return json({ success: false, error: "Could not create payment request." }, 500);
+      if (existing) return json({ success: true, payment_id: existing.id, amount_nano: 50000000 });
+
+      const { data: payment, error: insertError } = await supabase.from("lte_payments")
+        .insert({
+          telegram_id: telegramId,
+          amount_nano: 50000000,
+          destination_address: "UQDt-rCzwylBWPzIx8toN3jNuvTnSzVh_NPxhQUSjsN1zWgY",
+          status: "pending",
+        }).select("id").single();
+      if (insertError || !payment) {
+        console.error("Payment request insert failed:", insertError?.message);
+        return json({ success: false, error: "Could not create payment request. Please retry." }, 500);
+      }
+      return json({ success: true, payment_id: payment.id, amount_nano: 50000000 });
+    }
+
+    if (body?.action === "verify-payment") {
+      const { data: profile, error: profileError } = await supabase.from("profiles")
+        .select("wallet_address, referred_by").eq("telegram_id", telegramId).maybeSingle();
+      if (profileError || !profile) return json({ success: false, error: "Profile not found" }, 404);
+      if (!profile.wallet_address) return json({ success: false, error: "Link your TON wallet first." }, 400);
+
+      const { data: payment, error: paymentError } = await supabase.from("lte_payments")
+        .select("id, created_at, status, transaction_hash")
+        .eq("telegram_id", telegramId).eq("status", "pending")
+        .order("created_at", { ascending: false }).limit(1).maybeSingle();
+      if (paymentError) return json({ success: false, error: "Could not load payment request." }, 500);
+      if (!payment) {
+        const { data: confirmed } = await supabase.from("lte_payments")
+          .select("id, transaction_hash").eq("telegram_id", telegramId)
+          .eq("status", "confirmed").limit(1).maybeSingle();
+        if (confirmed) {
+          const { data: rewardRows, error: rewardError } = await supabase.rpc("qualify_lte_referral", {
+            p_invitee_telegram_id: telegramId,
+          });
+          if (rewardError) return json({ success: false, error: "Payment confirmed, but referral reward needs retry." }, 500);
+          return json({ success: true, status: "confirmed", already_confirmed: true, referral_rewarded: Boolean(rewardRows?.[0]?.rewarded) });
+        }
+        return json({ success: false, error: "No pending payment was found. Start the payment first." }, 404);
+      }
+
+      const txHash = await findConfirmedPayment(profile.wallet_address, payment.created_at);
+      if (!txHash) return json({ success: true, status: "pending", message: "Payment not found yet. Wait for network confirmation and try again." });
+
+      const { error: updateError } = await supabase.from("lte_payments")
+        .update({ status: "confirmed", transaction_hash: txHash, confirmed_at: new Date().toISOString() })
+        .eq("id", payment.id).eq("status", "pending");
+      if (updateError) {
+        console.error("Payment confirmation update failed:", updateError.message);
+        return json({ success: false, error: "Could not record payment confirmation. Please retry." }, 500);
+      }
+
+      const { data: rewardRows, error: rewardError } = await supabase.rpc("qualify_lte_referral", {
+        p_invitee_telegram_id: telegramId,
+      });
+      if (rewardError) {
+        console.error("Referral reward failed after confirmed payment:", rewardError.message);
+        return json({ success: false, error: "Payment confirmed, but referral reward needs retry." }, 500);
+      }
+      return json({
+        success: true,
+        status: "confirmed",
+        transaction_hash: txHash,
+        referral_rewarded: Boolean(rewardRows?.[0]?.rewarded),
+        message: "Payment confirmed on the TON network.",
       });
     }
 

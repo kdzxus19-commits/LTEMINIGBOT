@@ -42,7 +42,7 @@ async function findConfirmedPayment(sourceAddress: string, createdAt: string) {
   const notBefore = Math.floor(new Date(createdAt).getTime() / 1000) - 90;
   for (const tx of payload.result) {
     const msg = tx?.in_msg;
-    if (!msg || msg.bounced === true) continue;
+    if (!msg || msg.bounced === true || tx?.description?.aborted === true) continue;
     if (Number(msg.value) !== 50000000) continue;
     if (Number(tx.utime) < notBefore) continue;
     if (rawTonAddress(msg.source || "") !== expectedSource) continue;

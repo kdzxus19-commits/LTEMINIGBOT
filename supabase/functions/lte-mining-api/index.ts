@@ -232,7 +232,11 @@ Deno.serve(async (req) => {
         if (confirmed) {
           return json({ success: true, status: "confirmed", already_confirmed: true, message: "Activation payment already confirmed." });
         }
-        return json({ success: false, error: "No pending payment was found. Start the payment first." }, 404);
+        return json({
+          success: true,
+          status: "unpaid",
+          message: "No payment request exists yet. Tap PAY 0.05 GRAM TO ACTIVATE to begin.",
+        });
       }
 
       const txHash = await findConfirmedPayment(profile.wallet_address, payment.created_at);

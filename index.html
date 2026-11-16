@@ -695,6 +695,16 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
   <button class="primary" id="copyReferralLink" type="button">COPY INVITE LINK</button>
   <div class="invite-status" style="margin-top:15px">QUALIFIED REFERRALS: <b id="qualifiedReferralCount">0</b></div>
  </div>
+ <div class="card invite-payment-card">
+  <div class="invite-eyebrow">REFERRAL QUALIFICATION</div>
+  <h3 style="color:#f1e3c5;margin:12px 0 7px">Confirm your 0.05 GRAM payment</h3>
+  <p class="muted" style="line-height:1.6">After linking your wallet, send exactly 0.05 GRAM to the project wallet. The inviter receives 50 LTE only after the network confirms the payment.</p>
+  <p class="muted" style="overflow-wrap:anywhere;font-size:10px">Destination: UQDt-rCzwylBWPzIx8toN3jNuvTnSzVh_NPxhQUSjsN1zWgY</p>
+  <p class="muted" style="font-size:10px;line-height:1.5">Payments are irreversible. Check the amount and destination in your wallet before approving. Never share your recovery phrase.</p>
+  <button class="primary" id="payReferralFee" type="button">PAY 0.05 GRAM</button>
+  <button class="primary" id="verifyReferralPayment" type="button" style="margin-top:9px;background:#27251f;color:#e8d5a5;border-color:#80683d">I HAVE PAID · VERIFY</button>
+  <p class="ton-connect-status" id="referralPaymentStatus" aria-live="polite">Link your wallet first. No payment is taken automatically.</p>
+ </div>
  <div class="card invite-steps">
   <div class="invite-step"><span>01</span><div><b>Your personal link</b><p class="muted">A unique Telegram invite link will be generated for your account.</p></div></div>
   <div class="invite-step"><span>02</span><div><b>Friends join</b><p class="muted">Friends will be able to open the mini app through your link.</p></div></div>
@@ -1034,6 +1044,70 @@ window.lteBackendReady=checkLteBackend();
   },()=>{statusEl.textContent='Connection status unavailable. Please try again.';});
   tonConnectUI.connectionRestored.catch(()=>{statusEl.textContent='Could not restore wallet connection. Reconnect to try again.';});
   statusEl.textContent='Connect your TON wallet to link its public address.';
+
+  function rawAddressForUi(value){
+   try{
+    const s=String(value||'').trim();
+    if(/^(?:-1|0):[0-9a-fA-F]{64}$/.test(s))return s.toLowerCase();
+    return s;
+   }catch(_){return '';}
+  }
+
+  const payButton=document.getElementById('payReferralFee');
+  const verifyButton=document.getElementById('verifyReferralPayment');
+  const paymentStatus=document.getElementById('referralPaymentStatus');
+  async function verifyReferralPayment(){
+   if(paymentStatus)paymentStatus.textContent='Checking the TON network…';
+   try{
+    const result=await api('verify-payment');
+    if(result.status==='confirmed'){
+     if(paymentStatus)paymentStatus.textContent=result.referral_rewarded?'Payment confirmed · Your inviter received 50 LTE.':'Payment confirmed · No referral reward was due for this account.';
+     if(payButton)payButton.disabled=true;
+     await loadReferralInfo();
+     return true;
+    }
+    if(paymentStatus)paymentStatus.textContent=result.message||'Payment is not visible yet. Wait a little and verify again.';
+    return false;
+   }catch(error){
+    if(paymentStatus)paymentStatus.textContent=error.message||'Could not verify payment.';
+    return false;
+   }
+  }
+  if(verifyButton)verifyButton.onclick=verifyReferralPayment;
+  if(payButton)payButton.onclick=async()=>{
+   if(!tonConnectUI.wallet||!tonConnectUI.wallet.account){if(paymentStatus)paymentStatus.textContent='Connect your TON wallet first.';return;}
+   payButton.disabled=true;
+   if(paymentStatus)paymentStatus.textContent='Preparing payment request…';
+   try{
+    const info=await api('get-referrals');
+    const linked=info.wallet_address||'';
+    const connected=tonConnectUI.wallet.account.address||'';
+    if(!linked||rawAddressForUi(linked)!==rawAddressForUi(connected))throw new Error('Connect the same wallet that you linked to your account.');
+    await api('create-payment');
+    if(paymentStatus)paymentStatus.textContent='Confirm 0.05 GRAM in your wallet. Nothing is sent until you approve there.';
+    await tonConnectUI.sendTransaction({
+     validUntil:Math.floor(Date.now()/1000)+300,
+     network:'-239',
+     messages:[{
+      address:'UQDt-rCzwylBWPzIx8toN3jNuvTnSzVh_NPxhQUSjsN1zWgY',
+      amount:'50000000'
+     }]
+    });
+    if(paymentStatus)paymentStatus.textContent='Wallet approved. Checking for the confirmed transfer…';
+    let confirmed=false;
+    for(let attempt=0;attempt<6;attempt++){
+     await new Promise(resolve=>setTimeout(resolve,5000));
+     confirmed=await verifyReferralPayment();
+     if(confirmed)break;
+    }
+    if(!confirmed&&paymentStatus)paymentStatus.textContent='Payment may still be processing. Tap “I HAVE PAID · VERIFY” in a moment.';
+   }catch(error){
+    if(paymentStatus)paymentStatus.textContent=error.message||'Payment was not completed.';
+   }finally{
+    payButton.disabled=false;
+   }
+  };
+
   await loadReferralInfo();
  }catch(error){
   statusEl.textContent=error&&error.message?error.message:'Could not initialize wallet connection.';

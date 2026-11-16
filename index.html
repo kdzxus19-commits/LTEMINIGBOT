@@ -978,7 +978,12 @@ async function checkLteBackend(){
    });
    const syncData=await syncResponse.json();
    if(!syncResponse.ok||!syncData.success)throw new Error(syncData.error||'Account sync failed');
-   el.textContent='Backend connected · Telegram account verified';
+   const referralDebug=syncData.referral_code_received
+    ?(syncData.referral_code_matches_inviter
+      ?(syncData.referral_bound?'Referral linked':'Referral code found · link not completed')
+      :'Referral code received · inviter not found')
+    :'No referral code detected';
+   el.textContent='Backend connected · Telegram account verified · '+referralDebug;
   }else{
    el.textContent='Backend connected · Open inside Telegram to sync your account';
   }

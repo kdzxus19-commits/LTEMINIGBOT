@@ -925,6 +925,15 @@ setInterval(loadGramMarketPrice,60000);
 const SUPABASE_URL='https://jzsufmqsthbgoyynkakj.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_Hm8U15Rx0nQPcNjb1wYVBg_x8q8Exof';
 
+function getLteReferralStartParam(){
+ const webApp=window.Telegram&&window.Telegram.WebApp;
+ const unsafeParam=webApp&&webApp.initDataUnsafe&&webApp.initDataUnsafe.start_param;
+ const queryParams=new URLSearchParams(window.location.search);
+ const hashParams=new URLSearchParams((window.location.hash||'').replace(/^#/,''));
+ const raw=unsafeParam||queryParams.get('tgWebAppStartParam')||hashParams.get('tgWebAppStartParam')||'';
+ return String(raw).trim().replace(/^ref_/,'').toUpperCase();
+}
+
 async function checkLteBackend(){
  const el=document.getElementById('backendStatus');
  if(!el)return;
@@ -946,7 +955,7 @@ async function checkLteBackend(){
      'apikey':SUPABASE_PUBLISHABLE_KEY,
      'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY
     },
-    body:JSON.stringify({action:'sync-profile',initData,referralCode:(window.Telegram?.WebApp?.initDataUnsafe?.start_param||'').replace(/^ref_/,'')})
+    body:JSON.stringify({action:'sync-profile',initData,referralCode:getLteReferralStartParam()})
    });
    const syncData=await syncResponse.json();
    if(!syncResponse.ok||!syncData.success)throw new Error(syncData.error||'Account sync failed');

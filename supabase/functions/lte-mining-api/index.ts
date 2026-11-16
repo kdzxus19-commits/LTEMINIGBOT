@@ -145,18 +145,27 @@ Deno.serve(async (req) => {
       }
 
       const referralCode = String(body?.referralCode ?? "").trim().toUpperCase();
+      let inviterFound = false;
+      let referralBound = false;
       if (referralCode) {
-        const { data: inviter } = await supabase.from("profiles")
+        const { data: inviter, error: inviterError } = await supabase.from("profiles")
           .select("telegram_id").eq("referral_code", referralCode).maybeSingle();
-        if (inviter && Number(inviter.telegram_id) !== telegramId) {
-          const { error: bindError } = await supabase.from("profiles").update({ referred_by: Number(inviter.telegram_id) })
-            .eq("telegram_id", telegramId).is("referred_by", null);
-          if (bindError) console.error("Referral binding failed:", bindError.message);
+        if (inviterError) console.error("Inviter lookup failed:", inviterError.message);
+        inviterFound = Boolean(inviter && Number(inviter.telegram_id) !== telegramId);
+        if (inviterFound) {
+          const { data: currentProfile } = await supabase.from("profiles")
+            .select("referred_by").eq("telegram_id", telegramId).maybeSingle();
+          if (!currentProfile?.referred_by) {
+            const { error: bindError } = await supabase.from("profiles").update({ referred_by: Number(inviter.telegram_id) })
+              .eq("telegram_id", telegramId).is("referred_by", null);
+            if (bindError) console.error("Referral binding failed:", bindError.message);
+            else referralBound = true;
+          }
         }
       }
 
       const { data: profile } = await supabase.from("profiles")
-        .select("referral_code, wallet_address").eq("telegram_id", telegramId).single();
+        .select("referral_code, wallet_address, referred_by").eq("telegram_id", telegramId).single();
       return json({
         success: true,
         message: "Telegram account verified and profile synchronized",
@@ -164,6 +173,9 @@ Deno.serve(async (req) => {
         username: user.username ?? null,
         referral_code: profile?.referral_code ?? null,
         wallet_address: profile?.wallet_address ?? null,
+        referral_code_received: Boolean(referralCode),
+        referral_code_matches_inviter: inviterFound,
+        referral_bound: referralBound || Boolean(profile?.referred_by),
       });
     }
 

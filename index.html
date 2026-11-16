@@ -995,7 +995,7 @@ window.lteBackendReady=checkLteBackend();
     if(codeEl)codeEl.textContent=data.referral_code||'—';
     if(countEl)countEl.textContent=String(data.qualified_count||0);
     if(linkEl&&data.referral_code){
-     const link='https://t.me/lteminingbot?startapp='+encodeURIComponent(data.referral_code);
+     const link='https://t.me/lteminigbot?startapp='+encodeURIComponent(data.referral_code);
      linkEl.value=link;
      const copyBtn=document.getElementById('copyReferralLink');
      if(copyBtn)copyBtn.onclick=()=>{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(link).then(()=>alert('Referral link copied!')).catch(()=>alert(link));}else{linkEl.select();document.execCommand('copy');alert('Referral link copied!');}};

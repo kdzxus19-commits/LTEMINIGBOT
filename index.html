@@ -501,6 +501,21 @@ nav button svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:
 .checkin-card button:disabled{background:#373329;border-color:#665638;color:#d4c49e;opacity:1;box-shadow:none}
 @media(max-width:350px){.checkin-days{gap:6px}.checkin-day{min-height:82px}.checkin-day>b{font-size:16px}}
 
+
+/* MOBILE HEADER FIT — keep brand and account pill readable */
+header{gap:10px;min-width:0}
+.logo{flex:1;min-width:0;overflow:hidden}
+.brand-wordmark{min-width:0;overflow:hidden}
+.brand-wordmark small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#headerUserPill{flex:0 1 auto;max-width:42%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:360px){
+ header{padding:15px 13px}
+ .brand-mark{width:36px;height:36px}
+ .logo{gap:8px;font-size:15px}
+ .brand-wordmark small{font-size:8px;letter-spacing:1.7px}
+ #headerUserPill{max-width:40%;padding:7px 8px;font-size:9px;letter-spacing:.4px}
+}
+
 </style>
 </head>
 <body>
